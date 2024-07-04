@@ -1,17 +1,17 @@
-## KT Splat_viewer
+###KT Splat_viewer
 
-#Control
+##Control   
 movement (WASD)
 camera angle (MOUSE)
 
-#Splat File Location
+##Splat File Location   
 https://huggingface.co/spatialai/SplatViewer/tree/main
 
-#How to Change Splat Model
+##How to Change Splat Model   
 ```
 params.get("url") || "tbRoom.splat",
         "https://huggingface.co/spatialai/SplatViewer/resolve/main/",
 ```
 
-#Reference
+##Reference   
 [antimatter15 Splat](https://github.com/antimatter15/splat).
