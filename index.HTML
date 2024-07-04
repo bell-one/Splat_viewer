@@ -328,5 +328,16 @@ other
 			<span id="camid"></span>
 		</div>
 		<script src="main.js"></script>
+	    	<script>
+		    document.addEventListener('DOMContentLoaded', function() {
+		        const sceneToggle = document.getElementById('scene-toggle');
+		        const toggleSpan = sceneToggle.querySelector('span');
+		
+		        toggleSpan.addEventListener('click', function() {
+		            sceneToggle.classList.toggle('open');
+		        });
+		    });
+	    	</script>
+
 	</body>
 </html>
