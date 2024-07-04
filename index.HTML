@@ -179,14 +179,30 @@
 				border-radius: 10px;
 				font-size: x-small;
 			}
-
-			#url-buttons {
-			    position: absolute;
-			    top: 10px;
-			    left: 50%;
-			    transform: translateX(-50%);
+			#scene-toggle {
+			    position: fixed;
+			    top: 50%;
+			    right: -150px; /* 초기에는 숨겨져 있음 */
+			    transform: translateY(-50%);
+			    background-color: rgba(0, 0, 0, 0.7);
+			    padding: 10px;
+			    border-radius: 10px 0 0 10px;
+			    transition: right 0.3s;
 			    z-index: 1000;
-			    display: flex;
+			}
+			
+			#scene-toggle span {
+			    cursor: pointer;
+			    color: white;
+			    writing-mode: vertical-rl;
+			    text-orientation: mixed;
+			    display: inline-block;
+			    padding: 10px 5px;
+			}
+			
+			#url-buttons {
+			    display: none; /* 초기에는 숨겨져 있음 */
+			    flex-direction: column;
 			    gap: 10px;
 			}
 			
@@ -202,7 +218,14 @@
 			#url-buttons button:hover {
 			    background-color: rgba(255, 255, 255, 0.9);
 			}
-
+			
+			#scene-toggle.open {
+			    right: 0;
+			}
+			
+			#scene-toggle.open #url-buttons {
+			    display: flex;
+			}
 			body.nohf .nohf {
 				display: none;
 			}
@@ -212,14 +235,16 @@
 		</style>
 	</head>
 	<body>
-		<div id="url-buttons">
-		        <button onclick="loadSplat('4th_floor.splat')">4th Floor</button>
-		        <button onclick="loadSplat('tbRoom.splat')">TestBed</button>
-		        <button onclick="loadSplat('best.splat')">Best</button>
-		        <button onclick="loadSplat('refresh.splat')">Refresh</button>			
-		        <button onclick="loadSplat('garden.splat')">Garden</button>
-    		</div>
-
+	    	<div id="scene-toggle">
+		        <span>Scene</span>
+			<div id="url-buttons">
+			        <button onclick="loadSplat('4th_floor.splat')">4th Floor</button>
+			        <button onclick="loadSplat('tbRoom.splat')">TestBed</button>
+			        <button onclick="loadSplat('best.splat')">Best</button>
+			        <button onclick="loadSplat('refresh.splat')">Refresh</button>			
+			        <button onclick="loadSplat('garden.splat')">Garden</button>
+	    		</div>
+		</div>
 		<script>
 			if(location.host.includes('hf.space')) document.body.classList.add('nohf');
 		</script>
