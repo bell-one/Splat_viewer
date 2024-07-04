@@ -179,6 +179,30 @@
 				border-radius: 10px;
 				font-size: x-small;
 			}
+
+			#url-buttons {
+			    position: absolute;
+			    top: 10px;
+			    left: 50%;
+			    transform: translateX(-50%);
+			    z-index: 1000;
+			    display: flex;
+			    gap: 10px;
+			}
+			
+			#url-buttons button {
+			    padding: 5px 10px;
+			    background-color: rgba(255, 255, 255, 0.7);
+			    border: none;
+			    border-radius: 5px;
+			    cursor: pointer;
+			    transition: background-color 0.3s;
+			}
+			
+			#url-buttons button:hover {
+			    background-color: rgba(255, 255, 255, 0.9);
+			}
+
 			body.nohf .nohf {
 				display: none;
 			}
