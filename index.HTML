@@ -188,7 +188,7 @@
 			    padding: 10px;
 			    border-radius: 10px 0 0 10px;
 			    transition: right 0.3s;
-			    z-index: 1000;
+			    z-index: 1000; /* 높은 z-index 값 설정 */
 			}
 			
 			#scene-toggle span {
@@ -198,12 +198,16 @@
 			    text-orientation: mixed;
 			    display: inline-block;
 			    padding: 10px 5px;
+			    z-index: 1001; /* span에 더 높은 z-index 값 설정 */
+			    position: relative; /* z-index가 적용되도록 position 설정 */
 			}
 			
 			#url-buttons {
 			    display: none; /* 초기에는 숨겨져 있음 */
 			    flex-direction: column;
 			    gap: 10px;
+			    z-index: 1001; /* 버튼에도 높은 z-index 값 설정 */
+			    position: relative; /* z-index가 적용되도록 position 설정 */
 			}
 			
 			#url-buttons button {
