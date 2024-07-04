@@ -1181,7 +1181,8 @@ async function main() {
                 // inv = translate4(inv,  0, 0, d);
                 inv = rotate4(inv, dtheta, 0, 1, 0);
 
-                inv = translate4(inv, -dx / innerWidth, -dy / innerHeight, 0);
+                //inv = translate4(inv, -dx / innerWidth, -dy / innerHeight, 0);
+                inv = translate4(inv, -dx / innerWidth, 0, 0);
 
                 // let preY = inv[13];
                 inv = translate4(inv, 0, 0, 0.1 * (1 - dscale));
