@@ -1184,7 +1184,7 @@ async function main() {
                 inv = translate4(inv, -dx / innerWidth, -dy / innerHeight, 0);
 
                 // let preY = inv[13];
-                inv = translate4(inv, 0, 0, 1 * (1 - dscale));
+                inv = translate4(inv, 0, 0, 0.1 * (1 - dscale));
                 // inv[13] = preY;
 
                 viewMatrix = invert4(inv);
