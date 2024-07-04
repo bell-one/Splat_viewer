@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 	<head>
-		<title>KT WebGL Digital TWIN Viewer</title>
+		<title>KT Digital TWIN WebGL Viewer</title>
 		<meta charset="utf-8" />
 		<meta
 			name="viewport"
@@ -170,7 +170,6 @@
 				width: 100%;
 				height: 100%;
 				touch-action: none;
-			    	z-index: 1; /* 또는 낮은 값, 예: 10 */
 			}
 
 			#instructions {
@@ -180,62 +179,30 @@
 				border-radius: 10px;
 				font-size: x-small;
 			}
-			#scene-toggle {
-			    position: fixed;
-			    top: 50%;
-			    right: 0;
-			    transform: translateY(-50%);
-			    background-color: rgba(0, 0, 0, 0.7);
-			    border-radius: 10px 0 0 10px;
-			    transition: right 0.3s;
-			    z-index: 1000;
-			}
-			
-			.toggle-button {
-			    cursor: pointer;
-			    padding: 10px 5px;
-			    background-color: rgba(0, 0, 0, 0.8);
-			    border-radius: 10px 0 0 10px;
-			}
-			
-			.toggle-button span {
-			    color: white;
-			    writing-mode: vertical-rl;
-			    text-orientation: mixed;
-			    font-size: 18px;
-			    font-weight: bold;
-			    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-			}
-			
+
 			#url-buttons {
-			    display: none;
-			    flex-direction: column;
+			    position: absolute;
+			    top: 10px;
+			    left: 50%;
+			    transform: translateX(-50%);
+			    z-index: 1000;
+			    display: flex;
 			    gap: 10px;
-			    padding: 10px;
 			}
 			
 			#url-buttons button {
-			    padding: 8px 15px;
-			    background-color: rgba(255, 255, 255, 0.8);
+			    padding: 5px 10px;
+			    background-color: rgba(255, 255, 255, 0.7);
 			    border: none;
 			    border-radius: 5px;
 			    cursor: pointer;
 			    transition: background-color 0.3s;
-			    font-weight: bold;
-			    color: #333;
 			}
 			
 			#url-buttons button:hover {
-			    background-color: rgba(255, 255, 255, 1);
+			    background-color: rgba(255, 255, 255, 0.9);
 			}
-			
-			#scene-toggle.open {
-			    right: 0;
-			}
-			
-			#scene-toggle.open #url-buttons {
-			    display: flex;
-			}
+
 			body.nohf .nohf {
 				display: none;
 			}
@@ -245,16 +212,14 @@
 		</style>
 	</head>
 	<body>
-	    	<div id="scene-toggle">
-		        <span>Scene</span>
-			<div id="url-buttons">
-			        <button onclick="loadSplat('4th_floor.splat')">4th Floor</button>
-			        <button onclick="loadSplat('tbRoom.splat')">TestBed</button>
-			        <button onclick="loadSplat('best.splat')">Best</button>
-			        <button onclick="loadSplat('refresh.splat')">Refresh</button>			
-			        <button onclick="loadSplat('garden.splat')">Garden</button>
-	    		</div>
-		</div>
+		<div id="url-buttons">
+		        <button onclick="loadSplat('4th_floor.splat')">4th Floor</button>
+		        <button onclick="loadSplat('tbRoom.splat')">TestBed</button>
+		        <button onclick="loadSplat('best.splat')">Best</button>
+		        <button onclick="loadSplat('refresh.splat')">Refresh</button>			
+		        <button onclick="loadSplat('garden.splat')">Garden</button>
+    		</div>
+
 		<script>
 			if(location.host.includes('hf.space')) document.body.classList.add('nohf');
 		</script>
@@ -338,16 +303,5 @@ other
 			<span id="camid"></span>
 		</div>
 		<script src="main.js"></script>
-		    <script>
-			document.addEventListener('DOMContentLoaded', function() {
-			    const sceneToggle = document.getElementById('scene-toggle');
-			    const toggleButton = sceneToggle.querySelector('.toggle-button');
-		
-			    toggleButton.addEventListener('click', function() {
-				sceneToggle.classList.toggle('open');
-			    });
-			});
-		    </script>
-
 	</body>
 </html>
