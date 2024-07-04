@@ -170,7 +170,7 @@
 				width: 100%;
 				height: 100%;
 				touch-action: none;
-			    	z-index: auto; /* 또는 낮은 값, 예: 10 */
+			    	z-index: 1; /* 또는 낮은 값, 예: 10 */
 			}
 
 			#instructions {
@@ -183,45 +183,50 @@
 			#scene-toggle {
 			    position: fixed;
 			    top: 50%;
-			    right: -150px; /* 초기에는 숨겨져 있음 */
+			    right: 0;
 			    transform: translateY(-50%);
 			    background-color: rgba(0, 0, 0, 0.7);
-			    padding: 10px;
 			    border-radius: 10px 0 0 10px;
 			    transition: right 0.3s;
-			    z-index: 1000; /* 높은 z-index 값 설정 */
+			    z-index: 1000;
 			}
 			
-			#scene-toggle span {
+			.toggle-button {
 			    cursor: pointer;
+			    padding: 10px 5px;
+			    background-color: rgba(0, 0, 0, 0.8);
+			    border-radius: 10px 0 0 10px;
+			}
+			
+			.toggle-button span {
 			    color: white;
 			    writing-mode: vertical-rl;
 			    text-orientation: mixed;
-			    display: inline-block;
-			    padding: 10px 5px;
-			    z-index: 1001; /* span에 더 높은 z-index 값 설정 */
-			    position: relative; /* z-index가 적용되도록 position 설정 */
+			    font-size: 18px;
+			    font-weight: bold;
+			    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 			}
 			
 			#url-buttons {
-			    display: none; /* 초기에는 숨겨져 있음 */
+			    display: none;
 			    flex-direction: column;
 			    gap: 10px;
-			    z-index: 1001; /* 버튼에도 높은 z-index 값 설정 */
-			    position: relative; /* z-index가 적용되도록 position 설정 */
+			    padding: 10px;
 			}
 			
 			#url-buttons button {
-			    padding: 5px 10px;
-			    background-color: rgba(255, 255, 255, 0.7);
+			    padding: 8px 15px;
+			    background-color: rgba(255, 255, 255, 0.8);
 			    border: none;
 			    border-radius: 5px;
 			    cursor: pointer;
 			    transition: background-color 0.3s;
+			    font-weight: bold;
+			    color: #333;
 			}
 			
 			#url-buttons button:hover {
-			    background-color: rgba(255, 255, 255, 0.9);
+			    background-color: rgba(255, 255, 255, 1);
 			}
 			
 			#scene-toggle.open {
