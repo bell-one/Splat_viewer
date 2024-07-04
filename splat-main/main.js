@@ -757,11 +757,7 @@ async function main() {
         carousel = false;
     } catch (err) {}
     const url = new URL(
-        // "nike.splat",
-        // location.href,
-        //params.get
         params.get("url") || "tbRoom.splat",
-        //"https://huggingface.co/cakewalk/splat-data/resolve/main/",
         "https://huggingface.co/spatialai/SplatViewer/resolve/main/",
         
     );
