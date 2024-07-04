@@ -758,7 +758,7 @@ async function main() {
     } catch (err) {}
     const url = new URL(
         params.get("url") || "tbRoom.splat",
-        "https://huggingface.co/a1raman/SpatialAI/resolve/main/tbRoom.splat",
+        "https://huggingface.co/spatialai/SplatViewer/resolve/main/tbRoom.splat",
     );
     const req = await fetch(url, {
         mode: "cors", // no-cors, *cors, same-origin
