@@ -1179,7 +1179,7 @@ async function main() {
                     2;
                 let inv = invert4(viewMatrix);
                 // inv = translate4(inv,  0, 0, d);
-                inv = rotate4(inv, dtheta, 0, 0, 1);
+                inv = rotate4(inv, dtheta, 0, 1, 0);
 
                 inv = translate4(inv, -dx / innerWidth, -dy / innerHeight, 0);
 
