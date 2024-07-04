@@ -757,12 +757,8 @@ async function main() {
         carousel = false;
     } catch (err) {}
     const url = new URL(
-        // "nike.splat",
-        // location.href,
-        //params.get
         params.get("url") || "tbRoom.splat",
-        //"https://huggingface.co/cakewalk/splat-data/resolve/main/",
-        "https://huggingface.co/a1raman/SpatialAI/resolve/main/",
+        "https://huggingface.co/a1raman/SpatialAI/resolve/main/tbRoom.splat",
     );
     const req = await fetch(url, {
         mode: "cors", // no-cors, *cors, same-origin
