@@ -159,6 +159,14 @@ let cameras = [
     // },
 ];
 
+let currentUrl = "4th_floor.splat";
+
+// loadSplat 함수 추가
+async function loadSplat(url) {
+    currentUrl = url;
+    await main();
+}
+
 let camera = cameras[0];
 
 function getProjectionMatrix(fx, fy, width, height) {
@@ -757,13 +765,8 @@ async function main() {
         carousel = false;
     } catch (err) {}
     const url = new URL(
-        // "nike.splat",
-        // location.href,
-        //params.get
-        params.get("url") || "4th_floor.splat",
-        //"https://huggingface.co/cakewalk/splat-data/resolve/main/",
-        "https://huggingface.co/spatialai/SplatViewer/resolve/main/",
-        
+        currentUrl,
+        "https://huggingface.co/spatialai/SplatViewer/resolve/main/"
     );
     const req = await fetch(url, {
         mode: "cors", // no-cors, *cors, same-origin
@@ -1495,8 +1498,8 @@ async function main() {
             vertexCount: Math.floor(bytesRead / rowLength),
         });
 }
-
-main().catch((err) => {
+// main 함수 호출 부분 수정
+loadSplat(currentUrl).catch((err) => {
     document.getElementById("spinner").style.display = "none";
     document.getElementById("message").innerText = err.toString();
 });
