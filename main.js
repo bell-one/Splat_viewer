@@ -882,7 +882,6 @@ async function main() {
     // );
 
     let startX, startY, down = false;
-    let startTouchX, startTouchY, downTouch = false;
     const sensitivity = 0.001; // 마우스 감도, 필요에 따라 조절 가능
 
     canvas.addEventListener("mousedown", (e) => {
@@ -891,14 +890,6 @@ async function main() {
         startY = e.clientY;
         down = true;
         console.log("Mouse down:", startX, startY);
-        //updateStatus();
-    });
-    canvas.addEventListener("touchstart", (e) => {
-        e.preventDefault();
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-        downTouch = true;
-        console.log("touchstart:", startTouchX, startTouchY);
         //updateStatus();
     });
 
@@ -926,30 +917,6 @@ async function main() {
 
         //updateStatus();
     });
-    canvas.addEventListener("touchmove", (e) => {
-        if (!down) return;
-
-        e.preventDefault();
-
-        let dx = sensitivity * (e.touches[0].clientX - startTouchX);
-        let dy = sensitivity * (e.touches[0].clientY - startTouchY);
-
-        // 회전 행렬 생성
-        let rotationY_Touch = axisAngleRotationMatrix([0, 1, 0], dx); // Y축 회전
-        let rotationX_Touch = axisAngleRotationMatrix([1, 0, 0], -dy); // X축 회전
-
-        // 회전 적용
-        viewMatrix = multiplyMatrices(viewMatrix, rotationY_Touch); // 카메라의 로컬 좌표계에서 Y축 회전
-        viewMatrix = multiplyMatrices(viewMatrix, rotationX_Touch); // 카메라의 로컬 좌표계에서 X축 회전
-
-        console.log("touch move:", dx, dy, "New viewMatrix:", viewMatrix);
-
-        // 시작점 업데이트
-        startTouchX = e.touches[0].clientX;
-        startTouchY = e.touches[0].clientY;
-
-        //updateStatus();
-    });
 
     canvas.addEventListener("mouseup", (e) => {
         e.preventDefault();
@@ -961,18 +928,6 @@ async function main() {
     canvas.addEventListener("mouseout", (e) => {
         down = false;
         console.log("Mouse out");
-        //updateStatus();
-    });
-    canvas.addEventListener("touchend", (e) => {
-        e.preventDefault();
-        downTouch = false;
-        console.log("touchend");
-        //updateStatus();
-    });
-
-    canvas.addEventListener("touchend", (e) => {
-        down = false;
-        console.log("touchend");
         //updateStatus();
     });
 
@@ -1005,105 +960,105 @@ async function main() {
     }
     
 
-    // let altX = 0,
-    //     altY = 0;
-    // canvas.addEventListener(
-    //     "touchstart",
-    //     (e) => {
-    //         e.preventDefault();
-    //         if (e.touches.length === 1) {
-    //             carousel = false;
-    //             startX = e.touches[0].clientX;
-    //             startY = e.touches[0].clientY;
-    //             down = 1;
-    //         } else if (e.touches.length === 2) {
-    //             // console.log('beep')
-    //             carousel = false;
-    //             startX = e.touches[0].clientX;
-    //             altX = e.touches[1].clientX;
-    //             startY = e.touches[0].clientY;
-    //             altY = e.touches[1].clientY;
-    //             down = 1;
-    //         }
-    //     },
-    //     { passive: false },
-    // );
-    // canvas.addEventListener(
-    //     "touchmove",
-    //     (e) => {
-    //         e.preventDefault();
-    //         if (e.touches.length === 1 && down) {
-    //             let inv = invert4(viewMatrix);
-    //             let dx = (4 * (e.touches[0].clientX - startX)) / innerWidth;
-    //             let dy = (4 * (e.touches[0].clientY - startY)) / innerHeight;
+    let altX = 0,
+        altY = 0;
+    canvas.addEventListener(
+        "touchstart",
+        (e) => {
+            e.preventDefault();
+            if (e.touches.length === 1) {
+                carousel = false;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                down = 1;
+            } else if (e.touches.length === 2) {
+                // console.log('beep')
+                carousel = false;
+                startX = e.touches[0].clientX;
+                altX = e.touches[1].clientX;
+                startY = e.touches[0].clientY;
+                altY = e.touches[1].clientY;
+                down = 1;
+            }
+        },
+        { passive: false },
+    );
+    canvas.addEventListener(
+        "touchmove",
+        (e) => {
+            e.preventDefault();
+            if (e.touches.length === 1 && down) {
+                let inv = invert4(viewMatrix);
+                let dx = (4 * (e.touches[0].clientX - startX)) / innerWidth;
+                let dy = (4 * (e.touches[0].clientY - startY)) / innerHeight;
 
-    //             let d = 1;
-    //             inv = translate4(inv, 0, 0, d);
-    //             // inv = translate4(inv,  -x, -y, -z);
-    //             // inv = translate4(inv,  x, y, z);
-    //             inv = rotate4(inv, dx, 0, 1, 0);
-    //             // inv = rotate4(inv, -dy, 1, 0, 0);
-    //             inv = translate4(inv, 0, 0, -d);
+                let d = 1;
+                inv = translate4(inv, 0, 0, d);
+                // inv = translate4(inv,  -x, -y, -z);
+                // inv = translate4(inv,  x, y, z);
+                inv = rotate4(inv, dx, 0, 1, 0);
+                // inv = rotate4(inv, -dy, 1, 0, 0);
+                inv = translate4(inv, 0, 0, -d);
 
-    //             viewMatrix = invert4(inv);
+                viewMatrix = invert4(inv);
 
-    //             startX = e.touches[0].clientX;
-    //             startY = e.touches[0].clientY;
-    //         } else if (e.touches.length === 2) {
-    //             // alert('beep')
-    //             const dtheta =
-    //                 Math.atan2(startY - altY, startX - altX) -
-    //                 Math.atan2(
-    //                     e.touches[0].clientY - e.touches[1].clientY,
-    //                     e.touches[0].clientX - e.touches[1].clientX,
-    //                 );
-    //             const dscale =
-    //                 Math.hypot(startX - altX, startY - altY) /
-    //                 Math.hypot(
-    //                     e.touches[0].clientX - e.touches[1].clientX,
-    //                     e.touches[0].clientY - e.touches[1].clientY,
-    //                 );
-    //             const dx =
-    //                 (e.touches[0].clientX +
-    //                     e.touches[1].clientX -
-    //                     (startX + altX)) /
-    //                 2;
-    //             const dy =
-    //                 (e.touches[0].clientY +
-    //                     e.touches[1].clientY -
-    //                     (startY + altY)) /
-    //                 2;
-    //             let inv = invert4(viewMatrix);
-    //             // inv = translate4(inv,  0, 0, d);
-    //             inv = rotate4(inv, dtheta, 0, 1, 0);
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            } else if (e.touches.length === 2) {
+                // alert('beep')
+                const dtheta =
+                    Math.atan2(startY - altY, startX - altX) -
+                    Math.atan2(
+                        e.touches[0].clientY - e.touches[1].clientY,
+                        e.touches[0].clientX - e.touches[1].clientX,
+                    );
+                const dscale =
+                    Math.hypot(startX - altX, startY - altY) /
+                    Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY,
+                    );
+                const dx =
+                    (e.touches[0].clientX +
+                        e.touches[1].clientX -
+                        (startX + altX)) /
+                    2;
+                const dy =
+                    (e.touches[0].clientY +
+                        e.touches[1].clientY -
+                        (startY + altY)) /
+                    2;
+                let inv = invert4(viewMatrix);
+                // inv = translate4(inv,  0, 0, d);
+                inv = rotate4(inv, dtheta, 0, 1, 0);
 
-    //             //inv = translate4(inv, -dx / innerWidth, -dy / innerHeight, 0);
-    //             inv = translate4(inv, -dx / innerWidth, 0, 0);
+                //inv = translate4(inv, -dx / innerWidth, -dy / innerHeight, 0);
+                inv = translate4(inv, -dx / innerWidth, 0, 0);
 
-    //             // let preY = inv[13];
-    //             inv = translate4(inv, 0, 0, 0.1 * (1 - dscale));
-    //             // inv[13] = preY;
+                // let preY = inv[13];
+                inv = translate4(inv, 0, 0, 0.1 * (1 - dscale));
+                // inv[13] = preY;
 
-    //             viewMatrix = invert4(inv);
+                viewMatrix = invert4(inv);
 
-    //             startX = e.touches[0].clientX;
-    //             altX = e.touches[1].clientX;
-    //             startY = e.touches[0].clientY;
-    //             altY = e.touches[1].clientY;
-    //         }
-    //     },
-    //     { passive: false },
-    // );
-    // canvas.addEventListener(
-    //     "touchend",
-    //     (e) => {
-    //         e.preventDefault();
-    //         down = false;
-    //         startX = 0;
-    //         startY = 0;
-    //     },
-    //     { passive: false },
-    // );
+                startX = e.touches[0].clientX;
+                altX = e.touches[1].clientX;
+                startY = e.touches[0].clientY;
+                altY = e.touches[1].clientY;
+            }
+        },
+        { passive: false },
+    );
+    canvas.addEventListener(
+        "touchend",
+        (e) => {
+            e.preventDefault();
+            down = false;
+            startX = 0;
+            startY = 0;
+        },
+        { passive: false },
+    );
 
     let jumpDelta = 0;
     let vertexCount = 0;
