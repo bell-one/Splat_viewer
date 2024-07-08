@@ -19,144 +19,7 @@ let cameras = [
         fy: 868.43888877239215,
         fx: 862.50726029445627,
     }
-    // {
-    //     id: 1,
-    //     img_name: "00009",
-    //     width: 1959,
-    //     height: 1090,
-    //     position: [
-    //         -2.5199776022057296, -0.09704735754873686, -3.6247725540304545,
-    //     ],
-    //     rotation: [
-    //         [0.9982731285632193, -0.011928707708098955, -0.05751927260507243],
-    //         [0.0065061360949636325, 0.9955928229282383, -0.09355533724430458],
-    //         [0.058381769258182864, 0.09301955098900708, 0.9939511719154457],
-    //     ],
-    //     fy: 1164.6601287484507,
-    //     fx: 1159.5880733038064,
-    // },
-    // {
-    //     id: 2,
-    //     img_name: "00017",
-    //     width: 1959,
-    //     height: 1090,
-    //     position: [
-    //         -0.7737533667465242, -0.3364271945329695, -2.9358969417573753,
-    //     ],
-    //     rotation: [
-    //         [0.9998813418672372, 0.013742375651625236, -0.0069605529394208224],
-    //         [-0.014268370388586709, 0.996512943252834, -0.08220929105659476],
-    //         [0.00580653013657589, 0.08229885200307129, 0.9965907801935302],
-    //     ],
-    //     fy: 1164.6601287484507,
-    //     fx: 1159.5880733038064,
-    // },
-    // {
-    //     id: 3,
-    //     img_name: "00025",
-    //     width: 1959,
-    //     height: 1090,
-    //     position: [
-    //         1.2198221749590001, -0.2196687861401182, -2.3183162007028453,
-    //     ],
-    //     rotation: [
-    //         [0.9208648867765482, 0.0012010625395201253, 0.389880004297208],
-    //         [-0.06298204172269357, 0.987319521752825, 0.14571693239364383],
-    //         [-0.3847611242348369, -0.1587410451475895, 0.9092635249821667],
-    //     ],
-    //     fy: 1164.6601287484507,
-    //     fx: 1159.5880733038064,
-    // },
-    // {
-    //     id: 4,
-    //     img_name: "00033",
-    //     width: 1959,
-    //     height: 1090,
-    //     position: [
-    //         1.742387858893817, -0.13848225198886954, -2.0566370113193146,
-    //     ],
-    //     rotation: [
-    //         [0.24669889292141334, -0.08370189346592856, -0.9654706879349405],
-    //         [0.11343747891376445, 0.9919082664242816, -0.05700815184573074],
-    //         [0.9624300466054861, -0.09545671285663988, 0.2541976029815521],
-    //     ],
-    //     fy: 1164.6601287484507,
-    //     fx: 1159.5880733038064,
-    // },
-    // {
-    //     id: 5,
-    //     img_name: "00041",
-    //     width: 1959,
-    //     height: 1090,
-    //     position: [
-    //         3.6567309419223935, -0.16470990600750707, -1.3458085590422042,
-    //     ],
-    //     rotation: [
-    //         [0.2341293058324528, -0.02968330457755884, -0.9717522161434825],
-    //         [0.10270823606832301, 0.99469554638321, -0.005638106875665722],
-    //         [0.9667649592295676, -0.09848690996657204, 0.2359360976431732],
-    //     ],
-    //     fy: 1164.6601287484507,
-    //     fx: 1159.5880733038064,
-    // },
-    // {
-    //     id: 6,
-    //     img_name: "00049",
-    //     width: 1959,
-    //     height: 1090,
-    //     position: [
-    //         3.9013554243203497, -0.2597500978038105, -0.8106154188297828,
-    //     ],
-    //     rotation: [
-    //         [0.6717235545638952, -0.015718162115524837, -0.7406351366386528],
-    //         [0.055627354673906296, 0.9980224478387622, 0.029270992841185218],
-    //         [0.7387104058127439, -0.060861588786650656, 0.6712695459756353],
-    //     ],
-    //     fy: 1164.6601287484507,
-    //     fx: 1159.5880733038064,
-    // },
-    // {
-    //     id: 7,
-    //     img_name: "00057",
-    //     width: 1959,
-    //     height: 1090,
-    //     position: [4.742994605467533, -0.05591660945412069, 0.9500365976084458],
-    //     rotation: [
-    //         [-0.17042655709210375, 0.01207080756938, -0.9852964448542146],
-    //         [0.1165090336695526, 0.9931575292530063, -0.00798543433078162],
-    //         [0.9784581921120181, -0.1161568667478904, -0.1706667764862097],
-    //     ],
-    //     fy: 1164.6601287484507,
-    //     fx: 1159.5880733038064,
-    // },
-    // {
-    //     id: 8,
-    //     img_name: "00065",
-    //     width: 1959,
-    //     height: 1090,
-    //     position: [4.34676307626522, 0.08168160516967145, 1.0876221470355405],
-    //     rotation: [
-    //         [-0.003575447631888379, -0.044792503246552894, -0.9989899137764799],
-    //         [0.10770152645126597, 0.9931680875192705, -0.04491693593046672],
-    //         [0.9941768441149182, -0.10775333677534978, 0.0012732004866391048],
-    //     ],
-    //     fy: 1164.6601287484507,
-    //     fx: 1159.5880733038064,
-    // },
-    // {
-    //     id: 9,
-    //     img_name: "00073",
-    //     width: 1959,
-    //     height: 1090,
-    //     position: [3.264984351114202, 0.078974937336732, 1.0117200284114904],
-    //     rotation: [
-    //         [-0.026919994628162257, -0.1565891128261527, -0.9872968974090509],
-    //         [0.08444552208239385, 0.983768234577625, -0.1583319754069128],
-    //         [0.9960643893290491, -0.0876350978794554, -0.013259786205163005],
-    //     ],
-    //     fy: 1164.6601287484507,
-    //     fx: 1159.5880733038064,
-    // },
+
 ];
 
 let currentUrl = "4th_floor.splat";
@@ -196,15 +59,15 @@ function getViewMatrix(camera) {
     ].flat();
     return camToWorld;
 }
-// function translate4(a, x, y, z) {
-//     return [
-//         ...a.slice(0, 12),
-//         a[0] * x + a[4] * y + a[8] * z + a[12],
-//         a[1] * x + a[5] * y + a[9] * z + a[13],
-//         a[2] * x + a[6] * y + a[10] * z + a[14],
-//         a[3] * x + a[7] * y + a[11] * z + a[15],
-//     ];
-// }
+function translate4(a, x, y, z) {
+    return [
+        ...a.slice(0, 12),
+        a[0] * x + a[4] * y + a[8] * z + a[12],
+        a[1] * x + a[5] * y + a[9] * z + a[13],
+        a[2] * x + a[6] * y + a[10] * z + a[14],
+        a[3] * x + a[7] * y + a[11] * z + a[15],
+    ];
+}
 
 function multiply4(a, b) {
     return [
@@ -748,10 +611,6 @@ let defaultViewMatrix = [
     0, 0, 1, 0, 
     0, -1, 0, 0, 
     0, 0, 0, 1,
-    // 1, 0, 0, 0, 
-    // 0, 0, 1, 0, 
-    // 0, -1, 0, 0, 
-    // 0, 0, 0, 1,
 ];
 
 
@@ -1018,10 +877,10 @@ async function main() {
     //     },
     //     { passive: false },
     // );
+
     let startX, startY, down = false;
     const sensitivity = 0.001; // 마우스 감도, 필요에 따라 조절 가능
 
-    
     canvas.addEventListener("mousedown", (e) => {
         e.preventDefault();
         startX = e.clientX;
@@ -1030,59 +889,45 @@ async function main() {
         console.log("Mouse down:", startX, startY);
         //updateStatus();
     });
-    
+
     canvas.addEventListener("mousemove", (e) => {
         if (!down) return;
-        
+
         e.preventDefault();
-        
+
         let dx = sensitivity * (e.clientX - startX);
         let dy = sensitivity * (e.clientY - startY);
-    
-        // 현재 카메라의 up 벡터 추출 (view matrix의 두 번째 열)
-        let upVector = [viewMatrix[1], viewMatrix[5], viewMatrix[9]];
-        
-        // up 벡터를 정규화
-        let upLength = Math.sqrt(upVector[0]**2 + upVector[1]**2 + upVector[2]**2);
-        upVector = upVector.map(v => v / upLength);
-    
-        // up 벡터를 중심으로 회전 (Y축 회전)
-        let rotationY = axisAngleRotationMatrix(upVector, dx);
-    
-        // 카메라의 right 벡터 추출 (view matrix의 첫 번째 열)
-        let rightVector = [viewMatrix[0], viewMatrix[4], viewMatrix[8]];
-        
-        
 
-        // X축 회전 (상하)
-        let rotationX = axisAngleRotationMatrix(rightVector, -dy);
-    
+        // 회전 행렬 생성
+        let rotationY = axisAngleRotationMatrix([0, 1, 0], dx); // Y축 회전
+        let rotationX = axisAngleRotationMatrix([1, 0, 0], -dy); // X축 회전
+
         // 회전 적용
-        viewMatrix = multiplyMatrices(rotationX, viewMatrix);
-        viewMatrix = multiplyMatrices(rotationY, viewMatrix);
-    
+        viewMatrix = multiplyMatrices(viewMatrix, rotationY); // 카메라의 로컬 좌표계에서 Y축 회전
+        viewMatrix = multiplyMatrices(viewMatrix, rotationX); // 카메라의 로컬 좌표계에서 X축 회전
+
         console.log("Mouse move:", dx, dy, "New viewMatrix:", viewMatrix);
-        
+
         // 시작점 업데이트
         startX = e.clientX;
         startY = e.clientY;
-        
+
         //updateStatus();
     });
-    
+
     canvas.addEventListener("mouseup", (e) => {
         e.preventDefault();
         down = false;
         console.log("Mouse up");
         //updateStatus();
     });
-    
+
     canvas.addEventListener("mouseout", (e) => {
         down = false;
         console.log("Mouse out");
         //updateStatus();
     });
-    
+
     // 4x4 행렬 곱셈 함수
     function multiplyMatrices(a, b) {
         let result = new Array(16).fill(0);
@@ -1095,22 +940,21 @@ async function main() {
         }
         return result;
     }
-    
+
     // 축-각 회전 행렬 생성 함수
     function axisAngleRotationMatrix(axis, angle) {
         let [x, y, z] = axis;
         let c = Math.cos(angle);
         let s = Math.sin(angle);
         let t = 1 - c;
-    
+
         return [
             t*x*x + c,   t*x*y - s*z, t*x*z + s*y, 0,
             t*x*y + s*z, t*y*y + c,   t*y*z - s*x, 0,
-            t*x*z - s*y, t*y*z + s*x, t*z*z + c,   0,
+            t*x*z - s*y, t*y*z + s*x, t*z*z + c,   0,   
             0,           0,           0,           1
         ];
     }
-    
     
     let altX = 0,
         altY = 0;
@@ -1230,7 +1074,7 @@ async function main() {
     });
 
     let leftGamepadTrigger, rightGamepadTrigger;
-  
+
     const frame = (now) => {
         let inv = invert4(viewMatrix);
         let shiftKey = activeKeys.includes("Shift") || activeKeys.includes("ShiftLeft") || activeKeys.includes("ShiftRight")
@@ -1241,6 +1085,7 @@ async function main() {
             } else {
                 inv = translate4(inv, 0, 0, 0.01);
             }
+            viewMatrix = inv;
         }
         if (activeKeys.includes("KeyS")) {
             if (shiftKey) {
@@ -1248,12 +1093,17 @@ async function main() {
             } else {
                 inv = translate4(inv, 0, 0, -0.01);
             }
+            viewMatrix = inv;
         }
         if (activeKeys.includes("KeyA"))
             inv = translate4(inv, -0.01, 0, 0);
+            viewMatrix = inv;
         //
         if (activeKeys.includes("KeyD"))
             inv = translate4(inv, 0.01, 0, 0);
+            viewMatrix = inv;
+        
+        //  updateViewMatrix(viewMatrix);
         // inv = rotate4(inv, 0.01, 0, 1, 0);
         //if (activeKeys.includes("KeyA")) inv = rotate4(inv, -0.01, 0, 1, 0);
         //if (activeKeys.includes("KeyD")) inv = rotate4(inv, 0.01, 0, 1, 0);
