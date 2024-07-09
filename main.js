@@ -16,10 +16,10 @@ let cameras = [
             // [ 0.24994818,  0.57522362,  0.77887335],
             // [-0.22345008,  0.81696022, -0.53164468],
         ],
-        //fy: 1500,
-        //fx: 1400,
-        fy: 868.43888877239215,
-        fx: 862.50726029445627,
+        fy: 1500,
+        fx: 1400,
+        // fy: 868.43888877239215,
+        // fx: 862.50726029445627,
     }
 
 ];
@@ -917,7 +917,8 @@ async function main() {
         ];
     }
     
-     let altX = 0,
+    
+    let altX = 0,
         altY = 0;
     canvas.addEventListener(
         "touchstart",
@@ -1016,7 +1017,101 @@ async function main() {
         },
         { passive: false },
     );
-	
+
+    // let altX = 0,
+    //     altY = 0;
+    // canvas.addEventListener(
+    //     "touchstart",
+    //     (e) => {
+    //         e.preventDefault();
+    //         if (e.touches.length === 1) {
+    //             carousel = false;
+    //             startX = e.touches[0].clientX;
+    //             startY = e.touches[0].clientY;
+    //             down = 1;
+    //         }
+    //     },
+    //     { passive: false },
+    // );
+    // canvas.addEventListener(
+    //     "touchmove",
+    //     (e) => {
+    //         e.preventDefault();
+    //         if (e.touches.length === 1 && down) {
+    //             e.preventDefault();
+
+    //             let dx = sensitivity * (e.touches[0].clientX - startX);
+    //             let dy = sensitivity * (e.touches[0].clientY - startY);
+
+    //             // 회전 행렬 생성
+    //             let rotationY = axisAngleRotationMatrix([0, 1, 0], dx); // Y축 회전
+    //             let rotationX = axisAngleRotationMatrix([1, 0, 0], -dy); // X축 회전
+
+    //             // 회전 적용
+    //             viewMatrix = multiplyMatrices(viewMatrix, rotationY); // 카메라의 로컬 좌표계에서 Y축 회전
+    //             viewMatrix = multiplyMatrices(viewMatrix, rotationX); // 카메라의 로컬 좌표계에서 X축 회전
+
+    //             console.log("Mouse move:", dx, dy, "New viewMatrix:", viewMatrix);
+
+    //             // 시작점 업데이트
+    //             startX = e.touches[0].clientX;
+    //             startY = e.touches[0].clientY;
+    //         } else if (e.touches.length === 2) {
+    //             // alert('beep')
+    //             const dtheta =
+    //                 Math.atan2(startY - altY, startX - altX) -
+    //                 Math.atan2(
+    //                     e.touches[0].clientY - e.touches[1].clientY,
+    //                     e.touches[0].clientX - e.touches[1].clientX,
+    //                 );
+    //             const dscale =
+    //                 Math.hypot(startX - altX, startY - altY) /
+    //                 Math.hypot(
+    //                     e.touches[0].clientX - e.touches[1].clientX,
+    //                     e.touches[0].clientY - e.touches[1].clientY,
+    //                 );
+    //             const dx =
+    //                 (e.touches[0].clientX +
+    //                     e.touches[1].clientX -
+    //                     (startX + altX)) /
+    //                 2;
+    //             const dy =
+    //                 (e.touches[0].clientY +
+    //                     e.touches[1].clientY -
+    //                     (startY + altY)) /
+    //                 2;
+    //             let inv = invert4(viewMatrix);
+    //             // inv = translate4(inv,  0, 0, d);
+    //             inv = rotate4(inv, dtheta, 0, 1, 0);
+
+    //             //inv = translate4(inv, -dx / innerWidth, -dy / innerHeight, 0);
+    //             inv = translate4(inv, -dx / innerWidth, 0, 0);
+
+    //             // let preY = inv[13];
+    //             inv = translate4(inv, 0, 0, 0.1 * (1 - dscale));
+    //             // inv[13] = preY;
+
+    //             viewMatrix = invert4(inv);
+
+    //             startX = e.touches[0].clientX;
+    //             altX = e.touches[1].clientX;
+    //             startY = e.touches[0].clientY;
+    //             altY = e.touches[1].clientY;
+    //         }
+    //     },
+    //     { passive: false },
+    // );
+    // canvas.addEventListener(
+    //     "touchend",
+    //     (e) => {
+    //         e.preventDefault();
+    //         down = false;
+    //         startX = 0;
+    //         startY = 0;
+    //     },
+    //     { passive: false },
+    // );
+
     let jumpDelta = 0;
     let vertexCount = 0;
 
