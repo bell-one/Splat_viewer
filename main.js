@@ -16,8 +16,10 @@ let cameras = [
             // [ 0.24994818,  0.57522362,  0.77887335],
             // [-0.22345008,  0.81696022, -0.53164468],
         ],
-        fy: 868.43888877239215,
-        fx: 862.50726029445627,
+        fy: 1500,
+        fx: 1400,
+        // fy: 868.43888877239215,
+        // fx: 862.50726029445627,
     }
 
 ];
@@ -29,6 +31,10 @@ async function loadSplat(url) {
     currentUrl = url;
     await main();
 }
+const isSupported = !!(
+	'ontouchstart' in window || // iOS & 안드로이드
+    (navigator.pointerEanbled && navigator.maxTouchPoints > 0)
+);  // IE 11+
 
 let camera = cameras[0];
 
@@ -837,100 +843,52 @@ async function main() {
         activeKeys = [];
     });
 
-    // window.addEventListener(
-    //     "wheel",
-    //     (e) => {
-    //         carousel = false;
-    //         e.preventDefault();
-    //         const lineHeight = 10;
-    //         const scale =
-    //             e.deltaMode == 1
-    //                 ? lineHeight
-    //                 : e.deltaMode == 2
-    //                 ? innerHeight
-    //                 : 1;
-    //         let inv = invert4(viewMatrix);
-    //         if (e.shiftKey) {
-    //             inv = translate4(
-    //                 inv,
-    //                 (e.deltaX * scale) / innerWidth,
-    //                 (e.deltaY * scale) / innerHeight,
-    //                 0,
-    //             );
-    //         } else if (e.ctrlKey || e.metaKey) {
-    //             // inv = rotate4(inv,  (e.deltaX * scale) / innerWidth,  0, 0, 1);
-    //             // inv = translate4(inv,  0, (e.deltaY * scale) / innerHeight, 0);
-    //             // let preY = inv[13];
-    //             inv = translate4(
-    //                 inv,
-    //                 0,
-    //                 0,
-    //                 (-10 * (e.deltaY * scale)) / innerHeight,
-    //             );
-    //             // inv[13] = preY;
-    //         } else {
-    //             let d = 4;
-    //             inv = translate4(inv, 0, 0, d);
-    //             inv = rotate4(inv, -(e.deltaX * scale) / innerWidth, 0, 1, 0);
-    //             inv = rotate4(inv, (e.deltaY * scale) / innerHeight, 1, 0, 0);
-    //             inv = translate4(inv, 0, 0, -d);
-    //         }
-
-    //         viewMatrix = invert4(inv);
-    //     },
-    //     { passive: false },
-    // );
-
+    
     let startX, startY, down = false;
     const sensitivity = 0.001; // 마우스 감도, 필요에 따라 조절 가능
-
+    
     canvas.addEventListener("mousedown", (e) => {
         e.preventDefault();
         startX = e.clientX;
         startY = e.clientY;
         down = true;
         console.log("Mouse down:", startX, startY);
-        //updateStatus();
     });
-
+    
     canvas.addEventListener("mousemove", (e) => {
         if (!down) return;
-
+    
         e.preventDefault();
-
+    
         let dx = sensitivity * (e.clientX - startX);
         let dy = sensitivity * (e.clientY - startY);
-
+    
         // 회전 행렬 생성
-        let rotationY = axisAngleRotationMatrix([0, 1, 0], dx); // Y축 회전
-        let rotationX = axisAngleRotationMatrix([1, 0, 0], -dy); // X축 회전
-
-        // 회전 적용
-        viewMatrix = multiplyMatrices(viewMatrix, rotationY); // 카메라의 로컬 좌표계에서 Y축 회전
-        viewMatrix = multiplyMatrices(viewMatrix, rotationX); // 카메라의 로컬 좌표계에서 X축 회전
-
+        let rotationY = axisAngleRotationMatrix([0, 1, 0], dx);
+        let rotationX = axisAngleRotationMatrix([1, 0, 0], -dy); // dy 값에 음수를 붙여 반대 방향으로 회전
+    
+        // 현재 뷰 행렬을 기준으로 회전 적용
+        let tempViewMatrix = multiplyMatrices(viewMatrix, rotationY);
+        viewMatrix = multiplyMatrices(tempViewMatrix, rotationX);
+    
         console.log("Mouse move:", dx, dy, "New viewMatrix:", viewMatrix);
-
+    
         // 시작점 업데이트
         startX = e.clientX;
         startY = e.clientY;
-
-        //updateStatus();
     });
-
+    
     canvas.addEventListener("mouseup", (e) => {
         e.preventDefault();
         down = false;
         console.log("Mouse up");
-        //updateStatus();
     });
-
+    
     canvas.addEventListener("mouseout", (e) => {
         down = false;
         console.log("Mouse out");
-        //updateStatus();
     });
-
+    
     // 4x4 행렬 곱셈 함수
     function multiplyMatrices(a, b) {
         let result = new Array(16).fill(0);
@@ -943,14 +901,14 @@ async function main() {
         }
         return result;
     }
-
+    
     // 축-각 회전 행렬 생성 함수
     function axisAngleRotationMatrix(axis, angle) {
         let [x, y, z] = axis;
         let c = Math.cos(angle);
         let s = Math.sin(angle);
         let t = 1 - c;
-
+    
         return [
             t*x*x + c,   t*x*y - s*z, t*x*z + s*y, 0,
             t*x*y + s*z, t*y*y + c,   t*y*z - s*x, 0,
@@ -958,6 +916,8 @@ async function main() {
             0,           0,           0,           1
         ];
     }
+    
+    
     
 
     let altX = 0,
@@ -971,14 +931,6 @@ async function main() {
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
                 down = 1;
-            } else if (e.touches.length === 2) {
-                // console.log('beep')
-                carousel = false;
-                startX = e.touches[0].clientX;
-                altX = e.touches[1].clientX;
-                startY = e.touches[0].clientY;
-                altY = e.touches[1].clientY;
-                down = 1;
             }
         },
         { passive: false },
@@ -988,20 +940,22 @@ async function main() {
         (e) => {
             e.preventDefault();
             if (e.touches.length === 1 && down) {
-                let inv = invert4(viewMatrix);
-                let dx = (4 * (e.touches[0].clientX - startX)) / innerWidth;
-                let dy = (4 * (e.touches[0].clientY - startY)) / innerHeight;
+                e.preventDefault();
 
-                let d = 1;
-                inv = translate4(inv, 0, 0, d);
-                // inv = translate4(inv,  -x, -y, -z);
-                // inv = translate4(inv,  x, y, z);
-                inv = rotate4(inv, dx, 0, 1, 0);
-                // inv = rotate4(inv, -dy, 1, 0, 0);
-                inv = translate4(inv, 0, 0, -d);
+                let dx = sensitivity * (e.touches[0].clientX - startX);
+                let dy = sensitivity * (e.touches[0].clientY - startY);
 
-                viewMatrix = invert4(inv);
+                // 회전 행렬 생성
+                let rotationY = axisAngleRotationMatrix([0, 1, 0], dx); // Y축 회전
+                let rotationX = axisAngleRotationMatrix([1, 0, 0], -dy); // X축 회전
 
+                // 회전 적용
+                viewMatrix = multiplyMatrices(viewMatrix, rotationY); // 카메라의 로컬 좌표계에서 Y축 회전
+                viewMatrix = multiplyMatrices(viewMatrix, rotationX); // 카메라의 로컬 좌표계에서 X축 회전
+
+                console.log("Mouse move:", dx, dy, "New viewMatrix:", viewMatrix);
+
+                // 시작점 업데이트
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
             } else if (e.touches.length === 2) {
@@ -1067,148 +1021,54 @@ async function main() {
     let avgFps = 0;
     let start = 0;
 
-    window.addEventListener("gamepadconnected", (e) => {
-        const gp = navigator.getGamepads()[e.gamepad.index];
-        console.log(
-            `Gamepad connected at index ${gp.index}: ${gp.id}. It has ${gp.buttons.length} buttons and ${gp.axes.length} axes.`,
-        );
-    });
-    window.addEventListener("gamepaddisconnected", (e) => {
-        console.log("Gamepad disconnected");
-    });
-
-    let leftGamepadTrigger, rightGamepadTrigger;
-
     const frame = (now) => {
-        let inv = invert4(viewMatrix);
-        let shiftKey = activeKeys.includes("Shift") || activeKeys.includes("ShiftLeft") || activeKeys.includes("ShiftRight")
-
+    
+        // viewMatrix에서 직접 방향 벡터를 계산합니다.
+        let rightVector = [viewMatrix[0], viewMatrix[4], viewMatrix[8]];
+        let forwardVector = [-viewMatrix[2], -viewMatrix[6], -viewMatrix[10]];
+    
+        // 벡터 정규화 함수
+        const normalize = (v) => {
+            let length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+            return [v[0] / length, v[1] / length, v[2] / length];
+        };
+    
+        // 벡터들을 정규화합니다
+        rightVector = normalize(rightVector);
+        forwardVector = normalize(forwardVector);
+    
+        const moveSpeed = 0.01;
+    
+        let movement = [0, 0, 0];
+    
         if (activeKeys.includes("KeyW")) {
-            if (shiftKey) {
-                inv = translate4(inv, 0, -0.01, 0);
-            } else {
-                inv = translate4(inv, 0, 0, 0.01);
-            }
-            viewMatrix = inv;
+            movement[0] += forwardVector[0] * moveSpeed;
+            movement[1] += forwardVector[1] * moveSpeed;
+            //movement[2] += forwardVector[2] * moveSpeed;
         }
         if (activeKeys.includes("KeyS")) {
-            if (shiftKey) {
-                inv = translate4(inv, 0, 0.01, 0);
-            } else {
-                inv = translate4(inv, 0, 0, -0.01);
-            }
-            viewMatrix = inv;
+            movement[0] -= forwardVector[0] * moveSpeed;
+            movement[1] -= forwardVector[1] * moveSpeed;
+            //movement[2] -= forwardVector[2] * moveSpeed;
         }
-        if (activeKeys.includes("KeyA"))
-            inv = translate4(inv, -0.01, 0, 0);
-            viewMatrix = inv;
-        //
-        if (activeKeys.includes("KeyD"))
-            inv = translate4(inv, 0.01, 0, 0);
-            viewMatrix = inv;
-        
-        //  updateViewMatrix(viewMatrix);
-        // inv = rotate4(inv, 0.01, 0, 1, 0);
-        //if (activeKeys.includes("KeyA")) inv = rotate4(inv, -0.01, 0, 1, 0);
-        //if (activeKeys.includes("KeyD")) inv = rotate4(inv, 0.01, 0, 1, 0);
-        //if (activeKeys.includes("KeyQ")) inv = rotate4(inv, 0.01, 0, 0, 1);
-        //if (activeKeys.includes("KeyE")) inv = rotate4(inv, -0.01, 0, 0, 1);
-        //if (activeKeys.includes("KeyW")) inv = rotate4(inv, 0.005, 1, 0, 0);
-        //if (activeKeys.includes("KeyS")) inv = rotate4(inv, -0.005, 1, 0, 0);
-
-        const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
-        let isJumping = activeKeys.includes("Space");
-        for (let gamepad of gamepads) {
-            if (!gamepad) continue;
-
-            const axisThreshold = 0.1; // Threshold to detect when the axis is intentionally moved
-            const moveSpeed = 0.06;
-            const rotateSpeed = 0.02;
-
-            // Assuming the left stick controls translation (axes 0 and 1)
-            if (Math.abs(gamepad.axes[0]) > axisThreshold) {
-                inv = translate4(inv, moveSpeed * gamepad.axes[0], 0, 0);
-                carousel = false;
-            }
-            if (Math.abs(gamepad.axes[1]) > axisThreshold) {
-                inv = translate4(inv, 0, 0, -moveSpeed * gamepad.axes[1]);
-                carousel = false;
-            }
-            if(gamepad.buttons[12].pressed || gamepad.buttons[13].pressed){
-                inv = translate4(inv, 0, -moveSpeed*(gamepad.buttons[12].pressed - gamepad.buttons[13].pressed), 0);
-                carousel = false;
-            }
-
-            if(gamepad.buttons[14].pressed || gamepad.buttons[15].pressed){
-                inv = translate4(inv, -moveSpeed*(gamepad.buttons[14].pressed - gamepad.buttons[15].pressed), 0, 0);
-                carousel = false;
-            }
-
-            // Assuming the right stick controls rotation (axes 2 and 3)
-            if (Math.abs(gamepad.axes[2]) > axisThreshold) {
-                inv = rotate4(inv, rotateSpeed * gamepad.axes[2], 0, 1, 0);
-                carousel = false;
-            }
-            if (Math.abs(gamepad.axes[3]) > axisThreshold) {
-                inv = rotate4(inv, -rotateSpeed * gamepad.axes[3], 1, 0, 0);
-                carousel = false;
-            }
-
-            let tiltAxis = gamepad.buttons[6].value - gamepad.buttons[7].value;
-            if (Math.abs(tiltAxis) > axisThreshold) {
-                inv = rotate4(inv, rotateSpeed * tiltAxis, 0, 0, 1);
-                carousel = false;
-            }
-            if (gamepad.buttons[4].pressed && !leftGamepadTrigger) {
-                camera = cameras[(cameras.indexOf(camera)+1)%cameras.length]
-                inv = invert4(getViewMatrix(camera));
-                carousel = false;
-            }
-            if (gamepad.buttons[5].pressed && !rightGamepadTrigger) {
-                camera = cameras[(cameras.indexOf(camera)+cameras.length-1)%cameras.length]
-                inv = invert4(getViewMatrix(camera));
-                carousel = false;
-            }
-            leftGamepadTrigger = gamepad.buttons[4].pressed;
-            rightGamepadTrigger = gamepad.buttons[5].pressed;
-            if (gamepad.buttons[0].pressed) {
-                isJumping = true;
-                carousel = false;
-            }
-            if(gamepad.buttons[3].pressed){
-                //carousel = true;
-            }
+        if (activeKeys.includes("KeyD")) {
+            movement[0] -= rightVector[0] * moveSpeed;
+            movement[1] -= rightVector[1] * moveSpeed;
+            //movement[2] -= rightVector[2] * moveSpeed;
         }
-
-        if (
-            ["KeyJ", "KeyK", "KeyL", "KeyI"].some((k) => activeKeys.includes(k))
-        ) {
-            let d = 4;
-            inv = translate4(inv, 0, 0, d);
-            inv = rotate4(
-                inv,
-                activeKeys.includes("KeyJ")
-                    ? -0.05
-                    : activeKeys.includes("KeyL")
-                    ? 0.05
-                    : 0,
-                0,
-                1,
-                0,
-            );
-            inv = rotate4(
-                inv,
-                activeKeys.includes("KeyI")
-                    ? 0.05
-                    : activeKeys.includes("KeyK")
-                    ? -0.05
-                    : 0,
-                1,
-                0,
-                0,
-            );
-            inv = translate4(inv, 0, 0, -d);
+        if (activeKeys.includes("KeyA")) {
+            movement[0] += rightVector[0] * moveSpeed;
+            movement[1] += rightVector[1] * moveSpeed;
+            //movement[2] += rightVector[2] * moveSpeed;
         }
+    
+   
+        // 계산된 이동을 viewMatrix에 적용
+        viewMatrix = translate4(viewMatrix, movement[0], movement[1], movement[2]);
+
+
+        let inv = invert4(viewMatrix);
+
 
         viewMatrix = invert4(inv);
 
@@ -1222,17 +1082,13 @@ async function main() {
             viewMatrix = invert4(inv);
         }
 
-        if (isJumping) {
-            jumpDelta = Math.min(1, jumpDelta + 0.05);
-        } else {
-            jumpDelta = Math.max(0, jumpDelta - 0.05);
-        }
+       
 
         let inv2 = invert4(viewMatrix);
         inv2 = translate4(inv2, 0, -jumpDelta, 0);
         inv2 = rotate4(inv2, -0.1 * jumpDelta, 1, 0, 0);
         let actualViewMatrix = invert4(inv2);
-
+            
         const viewProj = multiply4(projectionMatrix, actualViewMatrix);
         worker.postMessage({ view: viewProj });
 
