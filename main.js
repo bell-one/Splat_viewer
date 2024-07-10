@@ -1111,6 +1111,205 @@ async function main() {
     //     },
     //     { passive: false },
     // );
+    
+
+    //조이스틱 구현 부분
+    const joystickMovement = document.getElementById('joystick-movement');
+    const containerMovement = document.getElementById('joystick-container-movement');
+    
+    let touchIdMovement = null;
+
+    containerMovement.addEventListener('touchstart', (event) => {
+        if (touchIdMovement === null) {
+            const touch = event.changedTouches[0];
+            touchIdMovement = touch.identifier;
+            moveJoystickMovement(touch.clientX, touch.clientY);
+        }
+    });
+
+    containerMovement.addEventListener('touchmove', (event) => {
+        if (touchIdMovement !== null) {
+            const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdMovement);
+            if (touch) {
+                moveJoystickMovement(touch.clientX, touch.clientY);
+            }
+        }
+    });
+
+    containerMovement.addEventListener('touchend', (event) => {
+        const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdMovement);
+        if (touch) {
+            touchIdMovement = null;
+            resetJoystickMovement();
+        }
+    });
+
+    containerMovement.addEventListener('touchcancel', (event) => {
+        const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdMovement);
+        if (touch) {
+            touchIdMovement = null;
+            resetJoystickMovement();
+        }
+    });
+
+    function moveJoystickMovement(clientX, clientY) {
+        const rect = containerMovement.getBoundingClientRect();
+        const x = clientX - rect.left - rect.width / 2;
+        const y = clientY - rect.top - rect.height / 2;
+        const angle = Math.atan2(y, x);
+        const distance = Math.min(Math.hypot(x, y), rect.width / 2 - joystickMovement.offsetWidth / 2);
+
+        const joystickX = distance * Math.cos(angle);
+        const joystickY = distance * Math.sin(angle);
+
+        joystickMovement.style.transform = `translate(${joystickX - 50}%, ${joystickY - 50}%)`;
+
+        // Update view matrix based on joystick movement
+        updateViewMatrix(joystickX, joystickY);
+    }
+
+    function resetJoystickMovement() {
+        joystickMovement.style.transform = 'translate(-50%, -50%)';
+        updateViewMatrix(0, 0); // Reset view matrix when joystick is released
+    }
+
+    function updateViewMatrix(joystickX, joystickY) {
+        // Normalize joystick inputs
+        const normalize = (value, max) => value / max;
+        const normalizedX = normalize(joystickX, containerMovement.clientWidth / 2);
+        const normalizedY = normalize(joystickY, containerMovement.clientHeight / 2);
+
+        const moveSpeed = 0.01;
+        const rotateSpeed = 0.005;
+
+        // Calculate movement vectors
+        let rightVector = [viewMatrix[0], viewMatrix[4], viewMatrix[8]];
+        let forwardVector = [-viewMatrix[2], -viewMatrix[6], -viewMatrix[10]];
+
+        // Normalize vectors
+        const normalizeVector = (v) => {
+            let length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+            return [v[0] / length, v[1] / length, v[2] / length];
+        };
+
+        rightVector = normalizeVector(rightVector);
+        forwardVector = normalizeVector(forwardVector);
+
+        let movement = [0, 0, 0];
+
+        // Apply joystick movement for forward/backward movement
+        movement[0] -= forwardVector[0] * normalizedY * moveSpeed;
+        movement[1] -= forwardVector[1] * normalizedY * moveSpeed;
+        movement[2] -= forwardVector[2] * normalizedY * moveSpeed;
+
+        // Apply joystick movement for right/left movement
+        movement[0] -= rightVector[0] * normalizedX * moveSpeed;
+        movement[1] -= rightVector[1] * normalizedX * moveSpeed;
+        movement[2] -= rightVector[2] * normalizedX * moveSpeed;
+
+        // Update position matrix with the calculated movement
+        viewMatrix = translate4(viewMatrix, movement[0], movement[1], movement[2]);
+
+        console.log('View Matrix:', viewMatrix); // For debugging purposes
+    }
+
+    const joystickRotation = document.getElementById('joystick-rotation');
+    const containerRotation = document.getElementById('joystick-container-rotation');
+
+    let touchIdRotation = null;
+    let startXRotation = 0;
+    let startYRotation = 0;
+
+    containerRotation.addEventListener('touchstart', (event) => {
+        if (touchIdRotation === null) {
+            const touch = event.changedTouches[0];
+            touchIdRotation = touch.identifier;
+            startXRotation = touch.clientX;
+            startYRotation = touch.clientY;
+
+        }
+    });
+
+    containerRotation.addEventListener('touchmove', (event) => {
+        if (touchIdRotation !== null) {
+            const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdRotation);
+            if (touch) {
+                const dx = (touch.clientX - startXRotation) / containerRotation.clientWidth;
+                //const dy = (touch.clientY - startYRotation) / containerRotation.clientHeight;
+
+                rotateViewMatrix(dx);
+                moveJoystickMovement2(touch.clientX, touch.clientY);
+                startXRotation = touch.clientX;
+                //startYRotation = touch.clientY;
+            }
+        }
+    });
+
+    containerRotation.addEventListener('touchend', (event) => {
+        const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdRotation);
+        if (touch) {
+            touchIdRotation = null;
+            resetJoystick()
+        }
+    });
+
+    function rotateViewMatrix(dx) {
+        const rotateSpeed = 0.5;
+
+        // Calculate rotation around the Y axis based on joystick X movement
+        const rotationY = dx * rotateSpeed;
+        //const rotationX = dy * rotateSpeed;
+        // Update view matrix with rotation
+        viewMatrix = rotateY(viewMatrix, rotationY);
+        //viewMatrix = rotateX(viewMatrix, rotationX);
+
+        console.log('View Matrix:', viewMatrix); // For debugging purposes
+    }
+
+    function rotateY(matrix, angle) {
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+
+        const rotationMatrix = [
+            cos, 0, sin, 0,
+            0, 1, 0, 0,
+            -sin, 0, cos, 0,
+            0, 0, 0, 1
+        ];
+
+        return multiplyMatrices(matrix, rotationMatrix);
+    }
+    function rotateX(matrix, angle) {
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+    
+        const rotationMatrix = [
+            1, 0, 0, 0,
+            0, cos, -sin, 0,
+            0, sin, cos, 0,
+            0, 0, 0, 1
+        ];
+    
+        return multiplyMatrices(matrix, rotationMatrix);
+    }
+
+    
+    function resetJoystick() {
+        joystickRotation.style.transform = `translate(-50%, -50%)`;
+    }
+
+    function moveJoystickMovement2(clientX, clientY) {
+        const rect = containerRotation.getBoundingClientRect();
+        const x = clientX - rect.left - rect.width / 2;
+        const y = clientY - rect.top - rect.height / 2;
+        const angle = Math.atan2(y, x);
+        const distance = Math.min(Math.hypot(x, y), rect.width / 2 - joystickRotation.offsetWidth / 2);
+
+        const joystickX = distance * Math.cos(angle);
+        const joystickY = distance * Math.sin(angle);
+
+        joystickRotation.style.transform = `translate(${joystickX - 50}%, ${joystickY - 50}%)`;
+    }
 
     let jumpDelta = 0;
     let vertexCount = 0;
