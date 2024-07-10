@@ -1,3 +1,4 @@
+//import { joystickfunc } from './joystick.js';
 let cameras = [
     {
         id: 0,
@@ -16,8 +17,8 @@ let cameras = [
             // [ 0.24994818,  0.57522362,  0.77887335],
             // [-0.22345008,  0.81696022, -0.53164468],
         ],
-        fy: 923.04,
-        fx: 919.12,
+        fy: 1500,
+        fx: 1400,
         // fy: 868.43888877239215,
         // fx: 862.50726029445627,
     }
@@ -65,15 +66,15 @@ function getViewMatrix(camera) {
     ].flat();
     return camToWorld;
 }
-function translate4(a, x, y, z) {
-    return [
-        ...a.slice(0, 12),
-        a[0] * x + a[4] * y + a[8] * z + a[12],
-        a[1] * x + a[5] * y + a[9] * z + a[13],
-        a[2] * x + a[6] * y + a[10] * z + a[14],
-        a[3] * x + a[7] * y + a[11] * z + a[15],
-    ];
-}
+// function translate4(a, x, y, z) {
+//     return [
+//         ...a.slice(0, 12),
+//         a[0] * x + a[4] * y + a[8] * z + a[12],
+//         a[1] * x + a[5] * y + a[9] * z + a[13],
+//         a[2] * x + a[6] * y + a[10] * z + a[14],
+//         a[3] * x + a[7] * y + a[11] * z + a[15],
+//     ];
+// }
 
 function multiply4(a, b) {
     return [
@@ -166,13 +167,33 @@ function rotate4(a, rad, x, y, z) {
     ];
 }
 
-function translate4(a, x, y, z) {
+// function translate4(a, x, y, z) {
+//     return [
+//         ...a.slice(0, 12),
+//         a[0] * x + a[4] * y + a[8] * z + a[12],
+//         a[1] * x + a[5] * y + a[9] * z + a[13],
+//         a[2] * x + a[6] * y + a[10] * z + a[14],
+//         a[3] * x + a[7] * y + a[11] * z + a[15],
+//     ];
+// }
+
+// 4x4 행렬 변환 함수
+function translate4(m, tx, ty, tz) {
+    let result = m.slice(); // 원본 행렬 복사
+    result[12] += tx;
+    result[13] += ty;
+    result[14] += tz;
+    return result;
+}
+
+
+// 벡터 변환 함수
+function transformVector(matrix, vector) {
+    let x = vector[0], y = vector[1], z = vector[2];
     return [
-        ...a.slice(0, 12),
-        a[0] * x + a[4] * y + a[8] * z + a[12],
-        a[1] * x + a[5] * y + a[9] * z + a[13],
-        a[2] * x + a[6] * y + a[10] * z + a[14],
-        a[3] * x + a[7] * y + a[11] * z + a[15],
+        matrix[0] * x + matrix[4] * y + matrix[8] * z,
+        matrix[1] * x + matrix[5] * y + matrix[9] * z,
+        matrix[2] * x + matrix[6] * y + matrix[10] * z
     ];
 }
 
@@ -813,6 +834,7 @@ async function main() {
             currentCameraIndex = parseInt(e.key)
             camera = cameras[currentCameraIndex];
             viewMatrix = defaultViewMatrix;
+            
             //viewMatrix = getViewMatrix(camera);
         }
 		if (['-', '_'].includes(e.key)){
@@ -843,16 +865,32 @@ async function main() {
         activeKeys = [];
     });
 
-    
+   
     let startX, startY, down = false;
-    const sensitivity = 0.001; // 마우스 감도, 필요에 따라 조절 가능
+    const sensitivity = 0.001; // 마우스 감도
+    let accumulatedRotationX = 0; // 누적된 X축 회전 값
+    let accumulatedRotationY = 0; // 누적된 Y축 회전 값
+    
+    // 초기 상태의 viewMatrix와 분리된 행렬들
+    let positionMatrix = [
+        1, 0, 0, 0, 
+        0, 0, 1, 0, 
+        0, -1, 0, 0, 
+        0, 0, 0, 1
+    ]; // 초기 위치 행렬
+    
+    let rotationMatrix = [
+        1, 0, 0, 0, 
+        0, 1, 0, 0, 
+        0, 0, 1, 0, 
+        0, 0, 0, 1
+    ]; // 초기 회전 행렬
     
     canvas.addEventListener("mousedown", (e) => {
         e.preventDefault();
         startX = e.clientX;
         startY = e.clientY;
         down = true;
-        console.log("Mouse down:", startX, startY);
     });
     
     canvas.addEventListener("mousemove", (e) => {
@@ -863,15 +901,15 @@ async function main() {
         let dx = sensitivity * (e.clientX - startX);
         let dy = sensitivity * (e.clientY - startY);
     
+        accumulatedRotationY += dx; // Y축 회전 값 누적 (왼쪽으로 이동하면 증가)
+        accumulatedRotationX -= dy; // X축 회전 값 누적 (위로 이동하면 증가)
+    
         // 회전 행렬 생성
-        let rotationY = axisAngleRotationMatrix([0, 1, 0], dx);
-        let rotationX = axisAngleRotationMatrix([1, 0, 0], -dy); // dy 값에 음수를 붙여 반대 방향으로 회전
+        let rotationX = axisAngleRotationMatrix([1, 0, 0], accumulatedRotationX); // X축 회전
+        let rotationY = axisAngleRotationMatrix([0, 1, 0], accumulatedRotationY); // Y축 회전
     
-        // 현재 뷰 행렬을 기준으로 회전 적용
-        let tempViewMatrix = multiplyMatrices(viewMatrix, rotationY);
-        viewMatrix = multiplyMatrices(tempViewMatrix, rotationX);
-    
-        console.log("Mouse move:", dx, dy, "New viewMatrix:", viewMatrix);
+        // 회전 행렬을 결합하여 최종 rotationMatrix 생성
+        rotationMatrix = multiplyMatrices(rotationY, rotationX);
     
         // 시작점 업데이트
         startX = e.clientX;
@@ -881,12 +919,10 @@ async function main() {
     canvas.addEventListener("mouseup", (e) => {
         e.preventDefault();
         down = false;
-        console.log("Mouse up");
     });
     
     canvas.addEventListener("mouseout", (e) => {
         down = false;
-        console.log("Mouse out");
     });
     
     // 4x4 행렬 곱셈 함수
@@ -895,7 +931,7 @@ async function main() {
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
                 for (let k = 0; k < 4; k++) {
-                    result[i*4+j] += a[i*4+k] * b[k*4+j];
+                    result[i * 4 + j] += a[i * 4 + k] * b[k * 4 + j];
                 }
             }
         }
@@ -910,16 +946,16 @@ async function main() {
         let t = 1 - c;
     
         return [
-            t*x*x + c,   t*x*y - s*z, t*x*z + s*y, 0,
-            t*x*y + s*z, t*y*y + c,   t*y*z - s*x, 0,
-            t*x*z - s*y, t*y*z + s*x, t*z*z + c,   0,   
-            0,           0,           0,           1
+            t * x * x + c, t * x * y - s * z, t * x * z + s * y, 0,
+            t * x * y + s * z, t * y * y + c, t * y * z - s * x, 0,
+            t * x * z - s * y, t * y * z + s * x, t * z * z + c, 0,
+            0, 0, 0, 1
         ];
     }
     
-    
     let altX = 0,
-        altY = 0;
+    altY = 0;
+
     canvas.addEventListener(
         "touchstart",
         (e) => {
@@ -1018,101 +1054,7 @@ async function main() {
         { passive: false },
     );
 
-    // let altX = 0,
-    //     altY = 0;
-    // canvas.addEventListener(
-    //     "touchstart",
-    //     (e) => {
-    //         e.preventDefault();
-    //         if (e.touches.length === 1) {
-    //             carousel = false;
-    //             startX = e.touches[0].clientX;
-    //             startY = e.touches[0].clientY;
-    //             down = 1;
-    //         }
-    //     },
-    //     { passive: false },
-    // );
-    // canvas.addEventListener(
-    //     "touchmove",
-    //     (e) => {
-    //         e.preventDefault();
-    //         if (e.touches.length === 1 && down) {
-    //             e.preventDefault();
-
-    //             let dx = sensitivity * (e.touches[0].clientX - startX);
-    //             let dy = sensitivity * (e.touches[0].clientY - startY);
-
-    //             // 회전 행렬 생성
-    //             let rotationY = axisAngleRotationMatrix([0, 1, 0], dx); // Y축 회전
-    //             let rotationX = axisAngleRotationMatrix([1, 0, 0], -dy); // X축 회전
-
-    //             // 회전 적용
-    //             viewMatrix = multiplyMatrices(viewMatrix, rotationY); // 카메라의 로컬 좌표계에서 Y축 회전
-    //             viewMatrix = multiplyMatrices(viewMatrix, rotationX); // 카메라의 로컬 좌표계에서 X축 회전
-
-    //             console.log("Mouse move:", dx, dy, "New viewMatrix:", viewMatrix);
-
-    //             // 시작점 업데이트
-    //             startX = e.touches[0].clientX;
-    //             startY = e.touches[0].clientY;
-    //         } else if (e.touches.length === 2) {
-    //             // alert('beep')
-    //             const dtheta =
-    //                 Math.atan2(startY - altY, startX - altX) -
-    //                 Math.atan2(
-    //                     e.touches[0].clientY - e.touches[1].clientY,
-    //                     e.touches[0].clientX - e.touches[1].clientX,
-    //                 );
-    //             const dscale =
-    //                 Math.hypot(startX - altX, startY - altY) /
-    //                 Math.hypot(
-    //                     e.touches[0].clientX - e.touches[1].clientX,
-    //                     e.touches[0].clientY - e.touches[1].clientY,
-    //                 );
-    //             const dx =
-    //                 (e.touches[0].clientX +
-    //                     e.touches[1].clientX -
-    //                     (startX + altX)) /
-    //                 2;
-    //             const dy =
-    //                 (e.touches[0].clientY +
-    //                     e.touches[1].clientY -
-    //                     (startY + altY)) /
-    //                 2;
-    //             let inv = invert4(viewMatrix);
-    //             // inv = translate4(inv,  0, 0, d);
-    //             inv = rotate4(inv, dtheta, 0, 1, 0);
-
-    //             //inv = translate4(inv, -dx / innerWidth, -dy / innerHeight, 0);
-    //             inv = translate4(inv, -dx / innerWidth, 0, 0);
-
-    //             // let preY = inv[13];
-    //             inv = translate4(inv, 0, 0, 0.1 * (1 - dscale));
-    //             // inv[13] = preY;
-
-    //             viewMatrix = invert4(inv);
-
-    //             startX = e.touches[0].clientX;
-    //             altX = e.touches[1].clientX;
-    //             startY = e.touches[0].clientY;
-    //             altY = e.touches[1].clientY;
-    //         }
-    //     },
-    //     { passive: false },
-    // );
-    // canvas.addEventListener(
-    //     "touchend",
-    //     (e) => {
-    //         e.preventDefault();
-    //         down = false;
-    //         startX = 0;
-    //         startY = 0;
-    //     },
-    //     { passive: false },
-    // );
-    
-
+    //joystickfunc();
     //조이스틱 구현 부분
     const joystickMovement = document.getElementById('joystick-movement');
     const containerMovement = document.getElementById('joystick-container-movement');
@@ -1124,6 +1066,7 @@ async function main() {
             const touch = event.changedTouches[0];
             touchIdMovement = touch.identifier;
             moveJoystickMovement(touch.clientX, touch.clientY);
+            console.log("Touch down:", touch.clientX);
         }
     });
 
@@ -1180,11 +1123,10 @@ async function main() {
         const normalizedY = normalize(joystickY, containerMovement.clientHeight / 2);
 
         const moveSpeed = 0.01;
-        const rotateSpeed = 0.005;
 
         // Calculate movement vectors
-        let rightVector = [viewMatrix[0], viewMatrix[4], viewMatrix[8]];
-        let forwardVector = [-viewMatrix[2], -viewMatrix[6], -viewMatrix[10]];
+        let rightVector = [rotationMatrix[0], rotationMatrix[1], rotationMatrix[2]];
+        let forwardVector = [rotationMatrix[8], rotationMatrix[9], rotationMatrix[10]];
 
         // Normalize vectors
         const normalizeVector = (v) => {
@@ -1199,16 +1141,19 @@ async function main() {
 
         // Apply joystick movement for forward/backward movement
         movement[0] -= forwardVector[0] * normalizedY * moveSpeed;
-        movement[1] -= forwardVector[1] * normalizedY * moveSpeed;
-        movement[2] -= forwardVector[2] * normalizedY * moveSpeed;
+        //movement[1] -= forwardVector[1] * normalizedY * moveSpeed;
+        movement[2] += forwardVector[2] * normalizedY * moveSpeed;
 
         // Apply joystick movement for right/left movement
         movement[0] -= rightVector[0] * normalizedX * moveSpeed;
-        movement[1] -= rightVector[1] * normalizedX * moveSpeed;
-        movement[2] -= rightVector[2] * normalizedX * moveSpeed;
+        //movement[1] -= rightVector[1] * normalizedX * moveSpeed;
+        movement[2] += rightVector[2] * normalizedX * moveSpeed;
 
-        // Update position matrix with the calculated movement
-        viewMatrix = translate4(viewMatrix, movement[0], movement[1], movement[2]);
+        // 계산된 이동을 positionMatrix에 적용
+        positionMatrix = translate4(positionMatrix, movement[0], movement[1], movement[2]);
+
+        // 이동된 positionMatrix와 회전된 rotationMatrix를 결합하여 viewMatrix 갱신
+        viewMatrix = multiplyMatrices(positionMatrix, rotationMatrix);
 
         console.log('View Matrix:', viewMatrix); // For debugging purposes
     }
@@ -1235,12 +1180,20 @@ async function main() {
             const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdRotation);
             if (touch) {
                 const dx = (touch.clientX - startXRotation) / containerRotation.clientWidth;
-                //const dy = (touch.clientY - startYRotation) / containerRotation.clientHeight;
+                const dy = (touch.clientY - startYRotation) / containerRotation.clientHeight;
 
-                rotateViewMatrix(dx);
+                accumulatedRotationY += dx; // Y축 회전 값 누적 (왼쪽으로 이동하면 증가)
+                accumulatedRotationX -= dy; // X축 회전 값 누적 (위로 이동하면 증가)
+
+                // 회전 행렬 생성
+                let rotationX = axisAngleRotationMatrix([1, 0, 0], accumulatedRotationX); // X축 회전
+                let rotationY = axisAngleRotationMatrix([0, 1, 0], accumulatedRotationY); // Y축 회전
+                rotationMatrix = multiplyMatrices(rotationY, rotationX);
+
+                //rotateViewMatrix(dx);
                 moveJoystickMovement2(touch.clientX, touch.clientY);
                 startXRotation = touch.clientX;
-                //startYRotation = touch.clientY;
+                startYRotation = touch.clientY;
             }
         }
     });
@@ -1253,18 +1206,7 @@ async function main() {
         }
     });
 
-    function rotateViewMatrix(dx) {
-        const rotateSpeed = 0.5;
-
-        // Calculate rotation around the Y axis based on joystick X movement
-        const rotationY = dx * rotateSpeed;
-        //const rotationX = dy * rotateSpeed;
-        // Update view matrix with rotation
-        viewMatrix = rotateY(viewMatrix, rotationY);
-        //viewMatrix = rotateX(viewMatrix, rotationX);
-
-        console.log('View Matrix:', viewMatrix); // For debugging purposes
-    }
+    
 
     function rotateY(matrix, angle) {
         const cos = Math.cos(angle);
@@ -1310,7 +1252,8 @@ async function main() {
 
         joystickRotation.style.transform = `translate(${joystickX - 50}%, ${joystickY - 50}%)`;
     }
-
+    //조이스틱 구현 끝
+    
     let jumpDelta = 0;
     let vertexCount = 0;
 
@@ -1319,50 +1262,57 @@ async function main() {
     let start = 0;
 
     const frame = (now) => {
-    
-        // viewMatrix에서 직접 방향 벡터를 계산합니다.
-        let rightVector = [viewMatrix[0], viewMatrix[4], viewMatrix[8]];
-        let forwardVector = [-viewMatrix[2], -viewMatrix[6], -viewMatrix[10]];
-    
+        
+         // rotationMatrix에서 방향 벡터를 계산합니다.
+        let rightVector = [rotationMatrix[0], rotationMatrix[1], rotationMatrix[2]];
+        let upVector = [rotationMatrix[1], rotationMatrix[5], rotationMatrix[9]];
+        let forwardVector = [rotationMatrix[2], rotationMatrix[6], rotationMatrix[10]];
+
+        
         // 벡터 정규화 함수
         const normalize = (v) => {
             let length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
             return [v[0] / length, v[1] / length, v[2] / length];
         };
-    
+
         // 벡터들을 정규화합니다
         rightVector = normalize(rightVector);
+        upVector = normalize(upVector);
         forwardVector = normalize(forwardVector);
-    
+        
         const moveSpeed = 0.01;
-    
+
         let movement = [0, 0, 0];
-    
+
         if (activeKeys.includes("KeyW")) {
-            movement[0] += forwardVector[0] * moveSpeed;
-            movement[1] += forwardVector[1] * moveSpeed;
-            //movement[2] += forwardVector[2] * moveSpeed;
+            movement[0] -= forwardVector[0] * moveSpeed;
+            //movement[1] -= forwardVector[1] * moveSpeed;
+            movement[2] -= forwardVector[2] * moveSpeed;
+            
         }
         if (activeKeys.includes("KeyS")) {
-            movement[0] -= forwardVector[0] * moveSpeed;
-            movement[1] -= forwardVector[1] * moveSpeed;
-            //movement[2] -= forwardVector[2] * moveSpeed;
+            movement[0] += forwardVector[0] * moveSpeed;
+            //movement[1] += forwardVector[1] * moveSpeed;
+            movement[2] += forwardVector[2] * moveSpeed;
         }
         if (activeKeys.includes("KeyD")) {
             movement[0] -= rightVector[0] * moveSpeed;
-            movement[1] -= rightVector[1] * moveSpeed;
-            //movement[2] -= rightVector[2] * moveSpeed;
+            //movement[1] -= rightVector[1] * moveSpeed;
+            movement[2] += rightVector[2] * moveSpeed;
         }
         if (activeKeys.includes("KeyA")) {
             movement[0] += rightVector[0] * moveSpeed;
-            movement[1] += rightVector[1] * moveSpeed;
-            //movement[2] += rightVector[2] * moveSpeed;
+            //movement[1] += rightVector[1] * moveSpeed;
+            movement[2] -= rightVector[2] * moveSpeed;
         }
-    
-   
-        // 계산된 이동을 viewMatrix에 적용
-        viewMatrix = translate4(viewMatrix, movement[0], movement[1], movement[2]);
+        
+        // 계산된 이동을 positionMatrix에 적용
+        positionMatrix = translate4(positionMatrix, movement[0], movement[1], movement[2]);
 
+        // 이동된 positionMatrix와 회전된 rotationMatrix를 결합하여 viewMatrix 갱신
+        viewMatrix = multiplyMatrices(positionMatrix, rotationMatrix);
+
+        
 
         let inv = invert4(viewMatrix);
 
@@ -1415,6 +1365,12 @@ async function main() {
         lastFrame = now;
         requestAnimationFrame(frame);
     };
+        // 예시로 키보드 이벤트 처리
+    
+    // 초기 상태 설정
+    let viewMatrix = multiplyMatrices(positionMatrix, rotationMatrix);
+    requestAnimationFrame(frame);
+    //requestAnimationFrame(frame);
 
     frame();
 
