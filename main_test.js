@@ -1285,15 +1285,19 @@ async function main() {
             movement[2] -= rightVector[2] * moveSpeed;
         }
 
-        if (activeKeys.includes("KeyQ")) inv = rotate4(inv, 0.01, 0, 0, 1);
-        if (activeKeys.includes("KeyE")) inv = rotate4(inv, -0.01, 0, 0, 1);
-	    
+	    if (activeKeys.includes("KeyQ")) {
+	        // 왼쪽으로 회전
+	        rotationMatrix = rotate4(rotationMatrix, 0.01, 0, 1, 0);
+	    }
+	    if (activeKeys.includes("KeyE")) {
+	        // 오른쪽으로 회전
+	        rotationMatrix = rotate4(rotationMatrix, -0.01, 0, 1, 0);
+	    }
         // 계산된 이동을 positionMatrix에 적용
         positionMatrix = translate4(positionMatrix, movement[0], movement[1], movement[2]);
 
         // 이동된 positionMatrix와 회전된 rotationMatrix를 결합하여 viewMatrix 갱신
         viewMatrix = multiplyMatrices(positionMatrix, rotationMatrix);
-	viewMatrix = multiplyMatrices(viewMatrix, inv);
 
         
 
