@@ -1347,18 +1347,18 @@ async function main() {
             movement[2] -= rightVector[2] * moveSpeed;
         }
 
-        if (activeKeys.includes("KeyQ")) inv = rotate4(inv, 0.01, 0, 0, 1);
-        if (activeKeys.includes("KeyE")) inv = rotate4(inv, -0.01, 0, 0, 1);
+        // if (activeKeys.includes("KeyQ")) inv = rotate4(inv, 0.01, 0, 0, 1);
+        // if (activeKeys.includes("KeyE")) inv = rotate4(inv, -0.01, 0, 0, 1);
 	    
         // 계산된 이동을 positionMatrix에 적용
         positionMatrix = translate4(positionMatrix, movement[0], movement[1], movement[2]);
 
 	    // 경계 박스 체크 및 이동 제한
-	    if (cameraBoundingBox) {
+    	if (cameraBoundingBox) {
 		const newPosition = [
-		    positionMatrix[12] + movement[0],
-		    positionMatrix[13] + movement[1],
-		    positionMatrix[14] + movement[2]
+	    		positionMatrix[12] + movement[0],
+	    		positionMatrix[13] + movement[1],
+	    		positionMatrix[14] + movement[2]
 		];
 	
 		for (let i = 0; i < 3; i++) {
@@ -1368,10 +1368,10 @@ async function main() {
 			movement[i] = cameraBoundingBox.max[i] - positionMatrix[12 + i];
 		    }
 		}
-	    }
+    	}
 	
-	    // 이동 적용
-	    positionMatrix = translate4(positionMatrix, movement[0], movement[1], movement[2]);
+	// 이동 적용
+	positionMatrix = translate4(positionMatrix, movement[0], movement[1], movement[2]);
 	    
         // 이동된 positionMatrix와 회전된 rotationMatrix를 결합하여 viewMatrix 갱신
         viewMatrix = multiplyMatrices(positionMatrix, rotationMatrix);
