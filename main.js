@@ -1348,7 +1348,7 @@ async function main() {
     
     // 초기 상태 설정
     let viewMatrix = multiplyMatrices(positionMatrix, rotationMatrix);
-    requestAnimationFrame(frame);
+    //requestAnimationFrame(frame);
     //requestAnimationFrame(frame);
 
     frame();
