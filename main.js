@@ -17,8 +17,8 @@ let cameras = [
             // [ 0.24994818,  0.57522362,  0.77887335],
             // [-0.22345008,  0.81696022, -0.53164468],
         ],
-        fy: 1500,
-        fx: 1400,
+        fy: 923.04,
+        fx: 919.12,
         // fy: 868.43888877239215,
         // fx: 862.50726029445627,
     }
@@ -167,15 +167,15 @@ function rotate4(a, rad, x, y, z) {
     ];
 }
 
-// function translate4(a, x, y, z) {
-//     return [
-//         ...a.slice(0, 12),
-//         a[0] * x + a[4] * y + a[8] * z + a[12],
-//         a[1] * x + a[5] * y + a[9] * z + a[13],
-//         a[2] * x + a[6] * y + a[10] * z + a[14],
-//         a[3] * x + a[7] * y + a[11] * z + a[15],
-//     ];
-// }
+function translate4_orbit(a, x, y, z) {
+    return [
+        ...a.slice(0, 12),
+        a[0] * x + a[4] * y + a[8] * z + a[12],
+        a[1] * x + a[5] * y + a[9] * z + a[13],
+        a[2] * x + a[6] * y + a[10] * z + a[14],
+        a[3] * x + a[7] * y + a[11] * z + a[15],
+    ];
+}
 
 // 4x4 행렬 변환 함수
 function translate4(m, tx, ty, tz) {
@@ -952,10 +952,8 @@ async function main() {
             0, 0, 0, 1
         ];
     }
-    
-    let altX = 0,
-    altY = 0;
 
+    //touch orbit
     canvas.addEventListener(
         "touchstart",
         (e) => {
@@ -965,15 +963,7 @@ async function main() {
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
                 down = 1;
-            } else if (e.touches.length === 2) {
-                // console.log('beep')
-                carousel = false;
-                startX = e.touches[0].clientX;
-                altX = e.touches[1].clientX;
-                startY = e.touches[0].clientY;
-                altY = e.touches[1].clientY;
-                down = 1;
-            }
+            } 
         },
         { passive: false },
     );
@@ -982,64 +972,24 @@ async function main() {
         (e) => {
             e.preventDefault();
             if (e.touches.length === 1 && down) {
-                let inv = invert4(viewMatrix);
+                let inv = invert4(rotationMatrix);
                 let dx = (4 * (e.touches[0].clientX - startX)) / innerWidth;
-                let dy = (4 * (e.touches[0].clientY - startY)) / innerHeight;
+                //let dy = (4 * (e.touches[0].clientY - startY)) / innerHeight;
 
-                let d = 1;
-                inv = translate4(inv, 0, 0, d);
+                //orbit 반경 (0:fps)
+                let d = 0.3;
+                inv = translate4_orbit(inv, 0, 0, d);
                 // inv = translate4(inv,  -x, -y, -z);
                 // inv = translate4(inv,  x, y, z);
                 inv = rotate4(inv, dx, 0, 1, 0);
                 // inv = rotate4(inv, -dy, 1, 0, 0);
-                inv = translate4(inv, 0, 0, -d);
+                inv = translate4_orbit(inv, 0, 0, -d);
 
-                viewMatrix = invert4(inv);
+                rotationMatrix = invert4(inv);
 
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
-            } else if (e.touches.length === 2) {
-                // alert('beep')
-                const dtheta =
-                    Math.atan2(startY - altY, startX - altX) -
-                    Math.atan2(
-                        e.touches[0].clientY - e.touches[1].clientY,
-                        e.touches[0].clientX - e.touches[1].clientX,
-                    );
-                const dscale =
-                    Math.hypot(startX - altX, startY - altY) /
-                    Math.hypot(
-                        e.touches[0].clientX - e.touches[1].clientX,
-                        e.touches[0].clientY - e.touches[1].clientY,
-                    );
-                const dx =
-                    (e.touches[0].clientX +
-                        e.touches[1].clientX -
-                        (startX + altX)) /
-                    2;
-                const dy =
-                    (e.touches[0].clientY +
-                        e.touches[1].clientY -
-                        (startY + altY)) /
-                    2;
-                let inv = invert4(viewMatrix);
-                // inv = translate4(inv,  0, 0, d);
-                inv = rotate4(inv, dtheta, 0, 1, 0);
-
-                //inv = translate4(inv, -dx / innerWidth, -dy / innerHeight, 0);
-                inv = translate4(inv, -dx / innerWidth, 0, 0);
-
-                // let preY = inv[13];
-                inv = translate4(inv, 0, 0, 0.1 * (1 - dscale));
-                // inv[13] = preY;
-
-                viewMatrix = invert4(inv);
-
-                startX = e.touches[0].clientX;
-                altX = e.touches[1].clientX;
-                startY = e.touches[0].clientY;
-                altY = e.touches[1].clientY;
-            }
+            } 
         },
         { passive: false },
     );
@@ -1175,15 +1125,23 @@ async function main() {
         }
     });
 
+    const maxRotationX = 10 * (Math.PI / 180); // 30도 라디안 상하 회전 제한
+    const minRotationX = -10 * (Math.PI / 180); // -30도 라디안 상하 회전 제한
+
     containerRotation.addEventListener('touchmove', (event) => {
         if (touchIdRotation !== null) {
             const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdRotation);
             if (touch) {
                 const dx = (touch.clientX - startXRotation) / containerRotation.clientWidth;
                 const dy = (touch.clientY - startYRotation) / containerRotation.clientHeight;
+                
+                const rotateSpeed = 0.5;
 
-                accumulatedRotationY += dx; // Y축 회전 값 누적 (왼쪽으로 이동하면 증가)
-                accumulatedRotationX -= dy; // X축 회전 값 누적 (위로 이동하면 증가)
+                accumulatedRotationY += dx * rotateSpeed; // Y축 회전 값 누적 (왼쪽으로 이동하면 증가)
+                accumulatedRotationX -= dy * rotateSpeed; // X축 회전 값 누적 (위로 이동하면 증가)
+
+                // X축 회전 값 제한
+                accumulatedRotationX = Math.max(minRotationX, Math.min(maxRotationX, accumulatedRotationX));
 
                 // 회전 행렬 생성
                 let rotationX = axisAngleRotationMatrix([1, 0, 0], accumulatedRotationX); // X축 회전
