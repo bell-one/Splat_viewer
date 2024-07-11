@@ -1365,21 +1365,21 @@ async function main() {
 		rotationMatrix = rotate4(rotationMatrix, -0.01, 1, 10, 100);
     	}
 
-	if (cameraBoundingBox) {
-            const newPosition = [
-                positionMatrix[12] + movement[0],
-                positionMatrix[13] + movement[1],
-                positionMatrix[14] + movement[2]
-            ];
+	// if (cameraBoundingBox) {
+ //            const newPosition = [
+ //                positionMatrix[12] + movement[0],
+ //                positionMatrix[13] + movement[1],
+ //                positionMatrix[14] + movement[2]
+ //            ];
 
-            for (let i = 0; i < 3; i++) {
-                if (newPosition[i] < cameraBoundingBox.min[i]) {
-                    movement[i] = cameraBoundingBox.min[i] - positionMatrix[12 + i];
-                } else if (newPosition[i] > cameraBoundingBox.max[i]) {
-                    movement[i] = cameraBoundingBox.max[i] - positionMatrix[12 + i];
-                }
-            }
-        }
+ //            for (let i = 0; i < 3; i++) {
+ //                if (newPosition[i] < cameraBoundingBox.min[i]) {
+ //                    movement[i] = cameraBoundingBox.min[i] - positionMatrix[12 + i];
+ //                } else if (newPosition[i] > cameraBoundingBox.max[i]) {
+ //                    movement[i] = cameraBoundingBox.max[i] - positionMatrix[12 + i];
+ //                }
+ //            }
+ //        }
 
 	    
         // 계산된 이동을 positionMatrix에 적용
