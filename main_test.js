@@ -50,7 +50,6 @@ async function fetchCOLMAPImagesFromHuggingFace() {
         const content = await response.text();
         return content;
     } catch (error) {
-        console.error("Could not fetch images.txt:", error);
         return null;
     }
 }
@@ -60,7 +59,6 @@ async function loadAndProcessCOLMAPImages() {
     if (content) {
         const cameras = parseCOLMAPImages(content);
         cameraBoundingBox = calculateBoundingBox(cameras);
-        console.log("Camera bounding box:", cameraBoundingBox);
     }
 }
 
