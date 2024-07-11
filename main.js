@@ -1284,7 +1284,10 @@ async function main() {
             //movement[1] += rightVector[1] * moveSpeed;
             movement[2] -= rightVector[2] * moveSpeed;
         }
-        
+
+        if (activeKeys.includes("KeyQ")) inv = rotate4(inv, 0.01, 0, 0, 1);
+        if (activeKeys.includes("KeyE")) inv = rotate4(inv, -0.01, 0, 0, 1);
+	    
         // 계산된 이동을 positionMatrix에 적용
         positionMatrix = translate4(positionMatrix, movement[0], movement[1], movement[2]);
 
