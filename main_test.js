@@ -1382,21 +1382,34 @@ async function main() {
         // positionMatrix = translate4(positionMatrix, movement[0], movement[1], movement[2]);
 
 	    // 경계 박스 체크 및 이동 제한
-    	if (cameraBoundingBox) {
-		const newPosition = [
-	    		positionMatrix[12] + movement[0],
-	    		positionMatrix[13] + movement[1],
-	    		positionMatrix[14] + movement[2]
-		];
-	
-		for (let i = 0; i < 3; i++) {
-		    if (newPosition[i] < cameraBoundingBox.min[i]) {
-			movement[i] = cameraBoundingBox.min[i] - positionMatrix[12 + i];
-		    } else if (newPosition[i] > cameraBoundingBox.max[i]) {
-			movement[i] = cameraBoundingBox.max[i] - positionMatrix[12 + i];
-		    }
-		}
-    	}
+    // 경계 박스 체크 및 이동 제한
+    if (cameraBoundingBox) {
+        const currentPosition = [positionMatrix[12], positionMatrix[13], positionMatrix[14]];
+        const newPosition = [
+            currentPosition[0] + movement[0],
+            currentPosition[1] + movement[1],
+            currentPosition[2] + movement[2]
+        ];
+
+        let isOutOfBounds = false;
+        for (let i = 0; i < 3; i++) {
+            if (newPosition[i] < cameraBoundingBox.min[i]) {
+                newPosition[i] = cameraBoundingBox.min[i];
+                isOutOfBounds = true;
+            } else if (newPosition[i] > cameraBoundingBox.max[i]) {
+                newPosition[i] = cameraBoundingBox.max[i];
+                isOutOfBounds = true;
+            }
+        }
+
+        if (isOutOfBounds) {
+            movement = [
+                newPosition[0] - currentPosition[0],
+                newPosition[1] - currentPosition[1],
+                newPosition[2] - currentPosition[2]
+            ];
+            console.log("Movement restricted. New position:", newPosition);
+        }
 	
 	// 이동 적용
 	positionMatrix = translate4(positionMatrix, movement[0], movement[1], movement[2]);
