@@ -715,7 +715,7 @@ let viewMatrix = defaultViewMatrix;
 async function main() { 
 
     // COLMAP 이미지 데이터 로드
-    await loadAndProcessCOLMAPImages();
+    //await loadAndProcessCOLMAPImages();
 	
     let carousel = false;
     const params = new URLSearchParams(location.search);
