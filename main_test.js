@@ -1293,6 +1293,7 @@ async function main() {
 
         // 이동된 positionMatrix와 회전된 rotationMatrix를 결합하여 viewMatrix 갱신
         viewMatrix = multiplyMatrices(positionMatrix, rotationMatrix);
+	viewMatrix = multiplyMatrices(viewMatrix, inv);
 
         
 
