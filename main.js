@@ -1010,11 +1010,15 @@ async function main() {
     const containerMovement = document.getElementById('joystick-container-movement');
     
     let touchIdMovement = null;
+    //지속적 움직임을 위한 변수
+    let moveX = 0, moveY = 0;
+    let isMoving = false;
 
     containerMovement.addEventListener('touchstart', (event) => {
         if (touchIdMovement === null) {
             const touch = event.changedTouches[0];
             touchIdMovement = touch.identifier;
+            isMoving = true;
             moveJoystickMovement(touch.clientX, touch.clientY);
             console.log("Touch down:", touch.clientX);
         }
@@ -1033,6 +1037,9 @@ async function main() {
         const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdMovement);
         if (touch) {
             touchIdMovement = null;
+            isMoving = false;
+            moveX = 0;
+            moveY = 0;
             resetJoystickMovement();
         }
     });
@@ -1041,6 +1048,9 @@ async function main() {
         const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdMovement);
         if (touch) {
             touchIdMovement = null;
+            isMoving = false;
+            moveX = 0;
+            moveY = 0;
             resetJoystickMovement();
         }
     });
@@ -1052,13 +1062,13 @@ async function main() {
         const angle = Math.atan2(y, x);
         const distance = Math.min(Math.hypot(x, y), rect.width / 2 - joystickMovement.offsetWidth / 2);
 
-        const joystickX = distance * Math.cos(angle);
-        const joystickY = distance * Math.sin(angle);
+        moveX = distance * Math.cos(angle);
+        moveY = distance * Math.sin(angle);
 
-        joystickMovement.style.transform = `translate(${joystickX - 50}%, ${joystickY - 50}%)`;
+        joystickMovement.style.transform = `translate(${moveX - 50}%, ${moveY - 50}%)`;
 
         // Update view matrix based on joystick movement
-        updateViewMatrix(joystickX, joystickY);
+        updateViewMatrix(moveX, moveY);
     }
 
     function resetJoystickMovement() {
@@ -1107,6 +1117,17 @@ async function main() {
 
         console.log('View Matrix:', viewMatrix); // For debugging purposes
     }
+    //지속적인 움직임을 위한 함수
+    function handleContinuousMovement() {
+        if (isMoving) {
+            // Update view matrix based on the last joystick movement
+            updateViewMatrix(moveX, moveY);
+        }
+        requestAnimationFrame(handleContinuousMovement);
+    }
+    
+    // 초기화 시 지속적인 이동 처리를 위한 함수 호출
+    handleContinuousMovement();
 
     const joystickRotation = document.getElementById('joystick-rotation');
     const containerRotation = document.getElementById('joystick-container-rotation');
