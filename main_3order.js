@@ -507,14 +507,32 @@ function createWorker(self) {
                 // rgba[1] = (0.5 + SH_C0 * attrs.f_dc_1) * 255;
                 // rgba[2] = (0.5 + SH_C0 * attrs.f_dc_2) * 255;
 
-                const SH_C0 = 0.28209479177387814;  // 0차 Spherical harmonics 계수
-                const SH_C1 = 0.4886025119029199;   // 1차 Spherical harmonics 계수
-                const SH_C2 = 1.0925484305920792;   // 2차 Spherical harmonics 계수
-                const SH_C3 = 0.31539156525252005;  // 3차 Spherical harmonics 계수
+		// //3차
+  //               const SH_C0 = 0.28209479177387814;  // 0차 Spherical harmonics 계수
+  //               const SH_C1 = 0.4886025119029199;   // 1차 Spherical harmonics 계수
+  //               const SH_C2 = 1.0925484305920792;   // 2차 Spherical harmonics 계수
+  //               const SH_C3 = 0.31539156525252005;  // 3차 Spherical harmonics 계수
             
-                rgba[0] = (0.5 + SH_C0 * attrs.f_dc_0 + SH_C1 * attrs.f_dc_1 + SH_C2 * attrs.f_dc_2 + SH_C3 * attrs.f_dc_3) * 255;
-                rgba[1] = (0.5 + SH_C0 * attrs.f_dc_0 + SH_C1 * attrs.f_dc_1 + SH_C2 * attrs.f_dc_2 + SH_C3 * attrs.f_dc_3) * 255;
-                rgba[2] = (0.5 + SH_C0 * attrs.f_dc_0 + SH_C1 * attrs.f_dc_1 + SH_C2 * attrs.f_dc_2 + SH_C3 * attrs.f_dc_3) * 255;
+  //               rgba[0] = (0.5 + SH_C0 * attrs.f_dc_0 + SH_C1 * attrs.f_dc_1 + SH_C2 * attrs.f_dc_2 + SH_C3 * attrs.f_dc_3) * 255;
+  //               rgba[1] = (0.5 + SH_C0 * attrs.f_dc_0 + SH_C1 * attrs.f_dc_1 + SH_C2 * attrs.f_dc_2 + SH_C3 * attrs.f_dc_3) * 255;
+  //               rgba[2] = (0.5 + SH_C0 * attrs.f_dc_0 + SH_C1 * attrs.f_dc_1 + SH_C2 * attrs.f_dc_2 + SH_C3 * attrs.f_dc_3) * 255;
+
+		// //2차
+		// const SH_C0 = 0.28209479177387814;  // 0차 Spherical harmonics 계수
+	 //    	const SH_C1 = 0.4886025119029199;   // 1차 Spherical harmonics 계수
+	 //    	const SH_C2 = 1.0925484305920792;   // 2차 Spherical harmonics 계수
+	
+	 //    	rgba[0] = (0.5 + SH_C0 * attrs.f_dc_0 + SH_C1 * attrs.f_dc_1 + SH_C2 * attrs.f_dc_2) * 255;
+	 //    	rgba[1] = (0.5 + SH_C0 * attrs.f_dc_0 + SH_C1 * attrs.f_dc_1 + SH_C2 * attrs.f_dc_2) * 255;
+	 //    	rgba[2] = (0.5 + SH_C0 * attrs.f_dc_0 + SH_C1 * attrs.f_dc_1 + SH_C2 * attrs.f_dc_2) * 255;
+		    
+		//1차
+		const SH_C0 = 0.28209479177387814;  // 0차 Spherical harmonics 계수
+	    	const SH_C1 = 0.4886025119029199;   // 1차 Spherical harmonics 계수
+	
+	    	rgba[0] = (0.5 + SH_C0 * attrs.f_dc_0 + SH_C1 * attrs.f_dc_1) * 255;
+	    	rgba[1] = (0.5 + SH_C0 * attrs.f_dc_0 + SH_C1 * attrs.f_dc_1) * 255;
+	    	rgba[2] = (0.5 + SH_C0 * attrs.f_dc_0 + SH_C1 * attrs.f_dc_1) * 255;
             } else {
                 rgba[0] = attrs.red;
                 rgba[1] = attrs.green;
