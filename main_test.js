@@ -51,6 +51,31 @@ function loadCOLMAPImages(file) {
     reader.readAsText(file);
 }
 
+async function fetchCOLMAPImagesFromHuggingFace() {
+    const url = 'https://huggingface.co/spatialai/SplatViewer/resolve/main/0.5xVideo24.sh1.sc1.txt';
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const content = await response.text();
+        return content;
+    } catch (error) {
+        console.error("Could not fetch images.txt:", error);
+        return null;
+    }
+}
+
+async function loadAndProcessCOLMAPImages() {
+    const content = await fetchCOLMAPImagesFromHuggingFace();
+    if (content) {
+        const cameras = parseCOLMAPImages(content);
+        cameraBoundingBox = calculateBoundingBox(cameras);
+        console.log("Camera bounding box:", cameraBoundingBox);
+    }
+}
+
+
 // 파일 선택 함수 수정
 const selectFile = (file) => {
     if (file.name === "images.txt") {
@@ -708,6 +733,9 @@ let defaultViewMatrix = [
 
 let viewMatrix = defaultViewMatrix;
 async function main() { 
+    // COLMAP 이미지 데이터 로드
+    await loadAndProcessCOLMAPImages();
+
     let carousel = false;
     const params = new URLSearchParams(location.search);
     
