@@ -1,90 +1,3 @@
-let cameraBoundingBox = null;
-
-function parseCOLMAPImages(content) {
-    const lines = content.split('\n').filter(line => line.trim() && !line.startsWith('#'));
-    const cameras = [];
-
-    for (let i = 0; i < lines.length; i += 2) {
-        const [imageId, qw, qx, qy, qz, tx, ty, tz, cameraId, name] = lines[i].split(' ');
-        cameras.push({
-            position: [parseFloat(tx), parseFloat(ty), parseFloat(tz)],
-            quaternion: [parseFloat(qw), parseFloat(qx), parseFloat(qy), parseFloat(qz)],
-            name: name
-        });
-    }
-
-    return cameras;
-}
-
-function calculateBoundingBox(cameras) {
-    const positions = cameras.map(cam => cam.position);
-    const min = [
-        Math.min(...positions.map(p => p[0])),
-        Math.min(...positions.map(p => p[1])),
-        Math.min(...positions.map(p => p[2]))
-    ];
-    const max = [
-        Math.max(...positions.map(p => p[0])),
-        Math.max(...positions.map(p => p[1])),
-        Math.max(...positions.map(p => p[2]))
-    ];
-    
-    // 경계 박스를 약간 확장
-    const padding = 0.1; // 10% 확장
-    for (let i = 0; i < 3; i++) {
-        const range = max[i] - min[i];
-        min[i] -= range * padding;
-        max[i] += range * padding;
-    }
-
-    return { min, max };
-}
-
-function loadCOLMAPImages(file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        const content = e.target.result;
-        const cameras = parseCOLMAPImages(content);
-        cameraBoundingBox = calculateBoundingBox(cameras);
-        console.log("Camera bounding box:", cameraBoundingBox);
-    };
-    reader.readAsText(file);
-}
-
-async function fetchCOLMAPImagesFromHuggingFace() {
-    const url = 'https://huggingface.co/spatialai/SplatViewer/resolve/main/0.5xVideo24.sh1.sc1.txt';
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const content = await response.text();
-        return content;
-    } catch (error) {
-        console.error("Could not fetch images.txt:", error);
-        return null;
-    }
-}
-
-async function loadAndProcessCOLMAPImages() {
-    const content = await fetchCOLMAPImagesFromHuggingFace();
-    if (content) {
-        const cameras = parseCOLMAPImages(content);
-        cameraBoundingBox = calculateBoundingBox(cameras);
-        console.log("Camera bounding box:", cameraBoundingBox);
-    }
-}
-
-
-// 파일 선택 함수 수정
-const selectFile = (file) => {
-    if (file.name === "images.txt") {
-        loadCOLMAPImages(file);
-    } else {
-        // 기존 파일 처리 로직...
-    }
-};
-
 //import { joystickfunc } from './joystick.js';
 let cameras = [
     {
@@ -1375,11 +1288,9 @@ async function main() {
         if (activeKeys.includes("KeyQ")) inv = rotate4(inv, 0.01, 0, 0, 1);
         if (activeKeys.includes("KeyE")) inv = rotate4(inv, -0.01, 0, 0, 1);
 	    
+        // 계산된 이동을 positionMatrix에 적용
+        positionMatrix = translate4(positionMatrix, movement[0], movement[1], movement[2]);
 
-
-	// 이동 적용
-	positionMatrix = translate4(positionMatrix, movement[0], movement[1], movement[2]);
-	    
         // 이동된 positionMatrix와 회전된 rotationMatrix를 결합하여 viewMatrix 갱신
         viewMatrix = multiplyMatrices(positionMatrix, rotationMatrix);
 
