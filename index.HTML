@@ -278,14 +278,38 @@
 	</head>
 	<body>
 		<!-- 조이스틱 컨테이너 Movement -->
-		<div class="mobile-only" id="joystick-container-movement">
+		<div id="joystick-container-movement">
 			<div id="joystick-movement"></div>
 		</div>
 
 		<!-- 조이스틱 컨테이너 Rotation-->
-		<div class="mobile-only" id="joystick-container-rotation">
+		<div id="joystick-container-rotation">
 			<div id="joystick-rotation"></div>
 		</div>
+
+		<script>
+		  function checkScreenSize() {
+		    var joystickContainers = document.querySelectorAll('[id*="joystick-container"]');
+		    
+		    if (window.innerWidth >= 768) {
+		      // 웹 버전 (768px 이상)
+		      joystickContainers.forEach(function(container) {
+		        container.style.display = 'none';
+		      });
+		    } else {
+		      // 모바일 버전 (768px 미만)
+		      joystickContainers.forEach(function(container) {
+		        container.style.display = 'block';
+		      });
+		    }
+		  }
+		
+		  // 페이지 로드 시 실행
+		  window.onload = checkScreenSize;
+		
+		  // 화면 크기가 변경될 때마다 실행
+		  window.onresize = checkScreenSize;
+		</script>
 		
 		<div id="url-buttons">
 		        <button onclick="loadSplat('best.splat')">Art</button>
