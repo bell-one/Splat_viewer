@@ -1287,11 +1287,11 @@ async function main() {
 
 	    if (activeKeys.includes("KeyQ")) {
 	        // 왼쪽으로 회전
-	        rotationMatrix = rotate4(rotationMatrix, 0.01, 0, 1, 0);
+	        rotationMatrix = rotate4(rotationMatrix, 0.01, 0, 0, 1);
 	    }
 	    if (activeKeys.includes("KeyE")) {
 	        // 오른쪽으로 회전
-	        rotationMatrix = rotate4(rotationMatrix, -0.01, 0, 1, 0);
+	        rotationMatrix = rotate4(rotationMatrix, -0.01, 0, 0, 1);
 	    }
         // 계산된 이동을 positionMatrix에 적용
         positionMatrix = translate4(positionMatrix, movement[0], movement[1], movement[2]);
