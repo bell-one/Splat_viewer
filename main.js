@@ -870,7 +870,8 @@ async function main() {
     const sensitivity = 0.001; // 마우스 감도
     let accumulatedRotationX = 0; // 누적된 X축 회전 값
     let accumulatedRotationY = 0; // 누적된 Y축 회전 값
-    
+    let accumulatedRotationZ = 0; // 누적된 Z축 회전 값
+
     // 초기 상태의 viewMatrix와 분리된 행렬들
     let positionMatrix = [
         1, 0, 0, 0, 
@@ -885,12 +886,14 @@ async function main() {
         0, 0, 1, 0, 
         0, 0, 0, 1
     ]; // 초기 회전 행렬
-    
+
     canvas.addEventListener("mousedown", (e) => {
         e.preventDefault();
         startX = e.clientX;
         startY = e.clientY;
         down = true;
+        console.log("Vertex Count", vertexCount);
+
     });
     
     canvas.addEventListener("mousemove", (e) => {
@@ -903,7 +906,7 @@ async function main() {
     
         accumulatedRotationY += dx; // Y축 회전 값 누적 (왼쪽으로 이동하면 증가)
         accumulatedRotationX -= dy; // X축 회전 값 누적 (위로 이동하면 증가)
-    
+        
         // 회전 행렬 생성
         let rotationX = axisAngleRotationMatrix([1, 0, 0], accumulatedRotationX); // X축 회전
         let rotationY = axisAngleRotationMatrix([0, 1, 0], accumulatedRotationY); // Y축 회전
@@ -924,7 +927,22 @@ async function main() {
     canvas.addEventListener("mouseout", (e) => {
         down = false;
     });
-    
+    //Q
+    document.addEventListener("keydown", (e) => {
+        if (e.code === "KeyQ") {
+            accumulatedRotationZ += sensitivity; 
+            let rotationZ = axisAngleRotationMatrix([0, 0, 1], accumulatedRotationZ);
+            rotationMatrix = multiplyMatrices(rotationZ, rotationMatrix); 
+        }
+    });
+    //E 
+    document.addEventListener("keydown", (e) => {
+        if (e.code === "KeyE") {
+            accumulatedRotationZ += sensitivity; 
+            let rotationZ = axisAngleRotationMatrix([0, 0, 1], -accumulatedRotationZ); 
+            rotationMatrix = multiplyMatrices(rotationZ, rotationMatrix); 
+        }
+    });
     // 4x4 행렬 곱셈 함수
     function multiplyMatrices(a, b) {
         let result = new Array(16).fill(0);
@@ -1284,9 +1302,6 @@ async function main() {
             //movement[1] += rightVector[1] * moveSpeed;
             movement[2] -= rightVector[2] * moveSpeed;
         }
-
-        if (activeKeys.includes("KeyQ")) inv = rotate4(inv, 0.01, 0, 0, 1);
-        if (activeKeys.includes("KeyE")) inv = rotate4(inv, -0.01, 0, 0, 1);
 	    
         // 계산된 이동을 positionMatrix에 적용
         positionMatrix = translate4(positionMatrix, movement[0], movement[1], movement[2]);
