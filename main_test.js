@@ -157,6 +157,12 @@ let cameras = [
 
 let camera = cameras[0];
 
+// loadSplat 함수 추가
+async function loadSplat(url) {
+    currentUrl = url;
+    await main();
+}
+
 function getProjectionMatrix(fx, fy, width, height) {
     const znear = 0.2;
     const zfar = 200;
@@ -731,9 +737,13 @@ void main () {
 
 `.trim();
 
+let currentUrl = "4th_floor.splat";
+
 let defaultViewMatrix = [
-    0.47, 0.04, 0.88, 0, -0.11, 0.99, 0.02, 0, -0.88, -0.11, 0.47, 0, 0.07,
-    0.03, 6.55, 1,
+    1, 0, 0, 0, 
+    0, 0, 1, 0, 
+    0, -1, 0, 0, 
+    0, 0, 0, 1,
 ];
 let viewMatrix = defaultViewMatrix;
 async function main() {
@@ -744,10 +754,8 @@ async function main() {
         carousel = false;
     } catch (err) {}
     const url = new URL(
-        // "nike.splat",
-        // location.href,
-        params.get("url") || "train.splat",
-        "https://huggingface.co/cakewalk/splat-data/resolve/main/",
+        currentUrl,
+        "https://huggingface.co/spatialai/SplatViewer/resolve/main/"
     );
     const req = await fetch(url, {
         mode: "cors", // no-cors, *cors, same-origin
@@ -1444,7 +1452,8 @@ async function main() {
         });
 }
 
-main().catch((err) => {
+// main 함수 호출 부분 수정
+loadSplat(currentUrl).catch((err) => {
     document.getElementById("spinner").style.display = "none";
     document.getElementById("message").innerText = err.toString();
 });
