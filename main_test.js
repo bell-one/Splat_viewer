@@ -1,41 +1,159 @@
-//import { joystickfunc } from './joystick.js';
 let cameras = [
     {
         id: 0,
         img_name: "00001",
-        width: 2992,
-        height: 2992,
+        width: 1959,
+        height: 1090,
         position: [
-            0, 0, 0,
+            -3.0089893469241797, -0.11086489695181866, -3.7527640949141428,
         ],
         rotation: [
-            [1, 0, 0],
-            [0, 1, 0],
-            [0, 0, 1],
-
-            // [-0.94212312, -0.04115569,  0.33273149],
-            // [ 0.24994818,  0.57522362,  0.77887335],
-            // [-0.22345008,  0.81696022, -0.53164468],
+            [0.876134201218856, 0.06925962026449776, 0.47706599800804744],
+            [-0.04747421839895102, 0.9972110940209488, -0.057586739349882114],
+            [-0.4797239414934443, 0.027805376500959853, 0.8769787916452908],
         ],
-        fy: 923.04,
-        fx: 919.12,
-        // fy: 868.43888877239215,
-        // fx: 862.50726029445627,
-    }
-
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 1,
+        img_name: "00009",
+        width: 1959,
+        height: 1090,
+        position: [
+            -2.5199776022057296, -0.09704735754873686, -3.6247725540304545,
+        ],
+        rotation: [
+            [0.9982731285632193, -0.011928707708098955, -0.05751927260507243],
+            [0.0065061360949636325, 0.9955928229282383, -0.09355533724430458],
+            [0.058381769258182864, 0.09301955098900708, 0.9939511719154457],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 2,
+        img_name: "00017",
+        width: 1959,
+        height: 1090,
+        position: [
+            -0.7737533667465242, -0.3364271945329695, -2.9358969417573753,
+        ],
+        rotation: [
+            [0.9998813418672372, 0.013742375651625236, -0.0069605529394208224],
+            [-0.014268370388586709, 0.996512943252834, -0.08220929105659476],
+            [0.00580653013657589, 0.08229885200307129, 0.9965907801935302],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 3,
+        img_name: "00025",
+        width: 1959,
+        height: 1090,
+        position: [
+            1.2198221749590001, -0.2196687861401182, -2.3183162007028453,
+        ],
+        rotation: [
+            [0.9208648867765482, 0.0012010625395201253, 0.389880004297208],
+            [-0.06298204172269357, 0.987319521752825, 0.14571693239364383],
+            [-0.3847611242348369, -0.1587410451475895, 0.9092635249821667],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 4,
+        img_name: "00033",
+        width: 1959,
+        height: 1090,
+        position: [
+            1.742387858893817, -0.13848225198886954, -2.0566370113193146,
+        ],
+        rotation: [
+            [0.24669889292141334, -0.08370189346592856, -0.9654706879349405],
+            [0.11343747891376445, 0.9919082664242816, -0.05700815184573074],
+            [0.9624300466054861, -0.09545671285663988, 0.2541976029815521],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 5,
+        img_name: "00041",
+        width: 1959,
+        height: 1090,
+        position: [
+            3.6567309419223935, -0.16470990600750707, -1.3458085590422042,
+        ],
+        rotation: [
+            [0.2341293058324528, -0.02968330457755884, -0.9717522161434825],
+            [0.10270823606832301, 0.99469554638321, -0.005638106875665722],
+            [0.9667649592295676, -0.09848690996657204, 0.2359360976431732],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 6,
+        img_name: "00049",
+        width: 1959,
+        height: 1090,
+        position: [
+            3.9013554243203497, -0.2597500978038105, -0.8106154188297828,
+        ],
+        rotation: [
+            [0.6717235545638952, -0.015718162115524837, -0.7406351366386528],
+            [0.055627354673906296, 0.9980224478387622, 0.029270992841185218],
+            [0.7387104058127439, -0.060861588786650656, 0.6712695459756353],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 7,
+        img_name: "00057",
+        width: 1959,
+        height: 1090,
+        position: [4.742994605467533, -0.05591660945412069, 0.9500365976084458],
+        rotation: [
+            [-0.17042655709210375, 0.01207080756938, -0.9852964448542146],
+            [0.1165090336695526, 0.9931575292530063, -0.00798543433078162],
+            [0.9784581921120181, -0.1161568667478904, -0.1706667764862097],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 8,
+        img_name: "00065",
+        width: 1959,
+        height: 1090,
+        position: [4.34676307626522, 0.08168160516967145, 1.0876221470355405],
+        rotation: [
+            [-0.003575447631888379, -0.044792503246552894, -0.9989899137764799],
+            [0.10770152645126597, 0.9931680875192705, -0.04491693593046672],
+            [0.9941768441149182, -0.10775333677534978, 0.0012732004866391048],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 9,
+        img_name: "00073",
+        width: 1959,
+        height: 1090,
+        position: [3.264984351114202, 0.078974937336732, 1.0117200284114904],
+        rotation: [
+            [-0.026919994628162257, -0.1565891128261527, -0.9872968974090509],
+            [0.08444552208239385, 0.983768234577625, -0.1583319754069128],
+            [0.9960643893290491, -0.0876350978794554, -0.013259786205163005],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
 ];
-
-let currentUrl = "4th_floor.splat";
-
-// loadSplat 함수 추가
-async function loadSplat(url) {
-    currentUrl = url;
-    await main();
-}
-const isSupported = !!(
-	'ontouchstart' in window || // iOS & 안드로이드
-    (navigator.pointerEanbled && navigator.maxTouchPoints > 0)
-);  // IE 11+
 
 let camera = cameras[0];
 
@@ -167,33 +285,13 @@ function rotate4(a, rad, x, y, z) {
     ];
 }
 
-function translate4_orbit(a, x, y, z) {
+function translate4(a, x, y, z) {
     return [
         ...a.slice(0, 12),
         a[0] * x + a[4] * y + a[8] * z + a[12],
         a[1] * x + a[5] * y + a[9] * z + a[13],
         a[2] * x + a[6] * y + a[10] * z + a[14],
         a[3] * x + a[7] * y + a[11] * z + a[15],
-    ];
-}
-
-// 4x4 행렬 변환 함수
-function translate4(m, tx, ty, tz) {
-    let result = m.slice(); // 원본 행렬 복사
-    result[12] += tx;
-    result[13] += ty;
-    result[14] += tz;
-    return result;
-}
-
-
-// 벡터 변환 함수
-function transformVector(matrix, vector) {
-    let x = vector[0], y = vector[1], z = vector[2];
-    return [
-        matrix[0] * x + matrix[4] * y + matrix[8] * z,
-        matrix[1] * x + matrix[5] * y + matrix[9] * z,
-        matrix[2] * x + matrix[6] * y + matrix[10] * z
     ];
 }
 
@@ -571,7 +669,6 @@ out vec4 vColor;
 out vec2 vPosition;
 
 void main () {
-
     uvec4 cen = texelFetch(u_texture, ivec2((uint(index) & 0x3ffu) << 1, uint(index) >> 10), 0);
     vec4 cam = view * vec4(uintBitsToFloat(cen.xyz), 1);
     vec4 pos2d = projection * cam;
@@ -619,7 +716,6 @@ void main () {
 const fragmentShaderSource = `
 #version 300 es
 precision highp float;
-//precision mediump float;
 
 in vec4 vColor;
 in vec2 vPosition;
@@ -627,7 +723,6 @@ in vec2 vPosition;
 out vec4 fragColor;
 
 void main () {
-    //gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0); // 예시로 흰색으로 설정
     float A = -dot(vPosition, vPosition);
     if (A < -4.0) discard;
     float B = exp(A) * vColor.a;
@@ -637,25 +732,22 @@ void main () {
 `.trim();
 
 let defaultViewMatrix = [
-    1, 0, 0, 0, 
-    0, 0, 1, 0, 
-    0, -1, 0, 0, 
-    0, 0, 0, 1,
+    0.47, 0.04, 0.88, 0, -0.11, 0.99, 0.02, 0, -0.88, -0.11, 0.47, 0, 0.07,
+    0.03, 6.55, 1,
 ];
-
-
 let viewMatrix = defaultViewMatrix;
-async function main() { 
-    let carousel = false;
+async function main() {
+    let carousel = true;
     const params = new URLSearchParams(location.search);
-    
     try {
         viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
         carousel = false;
     } catch (err) {}
     const url = new URL(
-        currentUrl,
-        "https://huggingface.co/spatialai/SplatViewer/resolve/main/"
+        // "nike.splat",
+        // location.href,
+        params.get("url") || "train.splat",
+        "https://huggingface.co/cakewalk/splat-data/resolve/main/",
     );
     const req = await fetch(url, {
         mode: "cors", // no-cors, *cors, same-origin
@@ -833,9 +925,7 @@ async function main() {
         if (/\d/.test(e.key)) {
             currentCameraIndex = parseInt(e.key)
             camera = cameras[currentCameraIndex];
-            viewMatrix = defaultViewMatrix;
-            
-            //viewMatrix = getViewMatrix(camera);
+            viewMatrix = getViewMatrix(camera);
         }
 		if (['-', '_'].includes(e.key)){
 			currentCameraIndex = (currentCameraIndex + cameras.length - 1) % cameras.length;
@@ -854,8 +944,8 @@ async function main() {
                 );
                 camid.innerText =""
         } else if (e.code === "KeyP") {
-            // carousel = true;
-            // camid.innerText =""
+            carousel = true;
+            camid.innerText =""
         }
     });
     window.addEventListener("keyup", (e) => {
@@ -865,95 +955,111 @@ async function main() {
         activeKeys = [];
     });
 
-   
-    let startX, startY, down = false;
-    const sensitivity = 0.001; // 마우스 감도
-    let accumulatedRotationX = 0; // 누적된 X축 회전 값
-    let accumulatedRotationY = 0; // 누적된 Y축 회전 값
-    
-    // 초기 상태의 viewMatrix와 분리된 행렬들
-    let positionMatrix = [
-        1, 0, 0, 0, 
-        0, 0, 1, 0, 
-        0, -1, 0, 0, 
-        0, 0, 0, 1
-    ]; // 초기 위치 행렬
-    
-    let rotationMatrix = [
-        1, 0, 0, 0, 
-        0, 1, 0, 0, 
-        0, 0, 1, 0, 
-        0, 0, 0, 1
-    ]; // 초기 회전 행렬
-    
+    window.addEventListener(
+        "wheel",
+        (e) => {
+            carousel = false;
+            e.preventDefault();
+            const lineHeight = 10;
+            const scale =
+                e.deltaMode == 1
+                    ? lineHeight
+                    : e.deltaMode == 2
+                    ? innerHeight
+                    : 1;
+            let inv = invert4(viewMatrix);
+            if (e.shiftKey) {
+                inv = translate4(
+                    inv,
+                    (e.deltaX * scale) / innerWidth,
+                    (e.deltaY * scale) / innerHeight,
+                    0,
+                );
+            } else if (e.ctrlKey || e.metaKey) {
+                // inv = rotate4(inv,  (e.deltaX * scale) / innerWidth,  0, 0, 1);
+                // inv = translate4(inv,  0, (e.deltaY * scale) / innerHeight, 0);
+                // let preY = inv[13];
+                inv = translate4(
+                    inv,
+                    0,
+                    0,
+                    (-10 * (e.deltaY * scale)) / innerHeight,
+                );
+                // inv[13] = preY;
+            } else {
+                let d = 4;
+                inv = translate4(inv, 0, 0, d);
+                inv = rotate4(inv, -(e.deltaX * scale) / innerWidth, 0, 1, 0);
+                inv = rotate4(inv, (e.deltaY * scale) / innerHeight, 1, 0, 0);
+                inv = translate4(inv, 0, 0, -d);
+            }
+
+            viewMatrix = invert4(inv);
+        },
+        { passive: false },
+    );
+
+    let startX, startY, down;
     canvas.addEventListener("mousedown", (e) => {
+        carousel = false;
         e.preventDefault();
         startX = e.clientX;
         startY = e.clientY;
-        down = true;
+        down = e.ctrlKey || e.metaKey ? 2 : 1;
     });
-    
+    canvas.addEventListener("contextmenu", (e) => {
+        carousel = false;
+        e.preventDefault();
+        startX = e.clientX;
+        startY = e.clientY;
+        down = 2;
+    });
+
     canvas.addEventListener("mousemove", (e) => {
-        if (!down) return;
-    
         e.preventDefault();
-    
-        let dx = sensitivity * (e.clientX - startX);
-        let dy = sensitivity * (e.clientY - startY);
-    
-        accumulatedRotationY += dx; // Y축 회전 값 누적 (왼쪽으로 이동하면 증가)
-        accumulatedRotationX -= dy; // X축 회전 값 누적 (위로 이동하면 증가)
-    
-        // 회전 행렬 생성
-        let rotationX = axisAngleRotationMatrix([1, 0, 0], accumulatedRotationX); // X축 회전
-        let rotationY = axisAngleRotationMatrix([0, 1, 0], accumulatedRotationY); // Y축 회전
-    
-        // 회전 행렬을 결합하여 최종 rotationMatrix 생성
-        rotationMatrix = multiplyMatrices(rotationY, rotationX);
-    
-        // 시작점 업데이트
-        startX = e.clientX;
-        startY = e.clientY;
+        if (down == 1) {
+            let inv = invert4(viewMatrix);
+            let dx = (5 * (e.clientX - startX)) / innerWidth;
+            let dy = (5 * (e.clientY - startY)) / innerHeight;
+            let d = 4;
+
+            inv = translate4(inv, 0, 0, d);
+            inv = rotate4(inv, dx, 0, 1, 0);
+            inv = rotate4(inv, -dy, 1, 0, 0);
+            inv = translate4(inv, 0, 0, -d);
+            // let postAngle = Math.atan2(inv[0], inv[10])
+            // inv = rotate4(inv, postAngle - preAngle, 0, 0, 1)
+            // console.log(postAngle)
+            viewMatrix = invert4(inv);
+
+            startX = e.clientX;
+            startY = e.clientY;
+        } else if (down == 2) {
+            let inv = invert4(viewMatrix);
+            // inv = rotateY(inv, );
+            // let preY = inv[13];
+            inv = translate4(
+                inv,
+                (-10 * (e.clientX - startX)) / innerWidth,
+                0,
+                (10 * (e.clientY - startY)) / innerHeight,
+            );
+            // inv[13] = preY;
+            viewMatrix = invert4(inv);
+
+            startX = e.clientX;
+            startY = e.clientY;
+        }
     });
-    
     canvas.addEventListener("mouseup", (e) => {
         e.preventDefault();
         down = false;
+        startX = 0;
+        startY = 0;
     });
-    
-    canvas.addEventListener("mouseout", (e) => {
-        down = false;
-    });
-    
-    // 4x4 행렬 곱셈 함수
-    function multiplyMatrices(a, b) {
-        let result = new Array(16).fill(0);
-        for (let i = 0; i < 4; i++) {
-            for (let j = 0; j < 4; j++) {
-                for (let k = 0; k < 4; k++) {
-                    result[i * 4 + j] += a[i * 4 + k] * b[k * 4 + j];
-                }
-            }
-        }
-        return result;
-    }
-    
-    // 축-각 회전 행렬 생성 함수
-    function axisAngleRotationMatrix(axis, angle) {
-        let [x, y, z] = axis;
-        let c = Math.cos(angle);
-        let s = Math.sin(angle);
-        let t = 1 - c;
-    
-        return [
-            t * x * x + c, t * x * y - s * z, t * x * z + s * y, 0,
-            t * x * y + s * z, t * y * y + c, t * y * z - s * x, 0,
-            t * x * z - s * y, t * y * z + s * x, t * z * z + c, 0,
-            0, 0, 0, 1
-        ];
-    }
 
-    //touch orbit
+    let altX = 0,
+        altY = 0;
     canvas.addEventListener(
         "touchstart",
         (e) => {
@@ -963,7 +1069,15 @@ async function main() {
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
                 down = 1;
-            } 
+            } else if (e.touches.length === 2) {
+                // console.log('beep')
+                carousel = false;
+                startX = e.touches[0].clientX;
+                altX = e.touches[1].clientX;
+                startY = e.touches[0].clientY;
+                altY = e.touches[1].clientY;
+                down = 1;
+            }
         },
         { passive: false },
     );
@@ -972,24 +1086,63 @@ async function main() {
         (e) => {
             e.preventDefault();
             if (e.touches.length === 1 && down) {
-                let inv = invert4(rotationMatrix);
+                let inv = invert4(viewMatrix);
                 let dx = (4 * (e.touches[0].clientX - startX)) / innerWidth;
-                //let dy = (4 * (e.touches[0].clientY - startY)) / innerHeight;
+                let dy = (4 * (e.touches[0].clientY - startY)) / innerHeight;
 
-                //orbit 반경 (0:fps)
-                let d = 0.3;
-                inv = translate4_orbit(inv, 0, 0, d);
+                let d = 4;
+                inv = translate4(inv, 0, 0, d);
                 // inv = translate4(inv,  -x, -y, -z);
                 // inv = translate4(inv,  x, y, z);
                 inv = rotate4(inv, dx, 0, 1, 0);
-                // inv = rotate4(inv, -dy, 1, 0, 0);
-                inv = translate4_orbit(inv, 0, 0, -d);
+                inv = rotate4(inv, -dy, 1, 0, 0);
+                inv = translate4(inv, 0, 0, -d);
 
-                rotationMatrix = invert4(inv);
+                viewMatrix = invert4(inv);
 
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
-            } 
+            } else if (e.touches.length === 2) {
+                // alert('beep')
+                const dtheta =
+                    Math.atan2(startY - altY, startX - altX) -
+                    Math.atan2(
+                        e.touches[0].clientY - e.touches[1].clientY,
+                        e.touches[0].clientX - e.touches[1].clientX,
+                    );
+                const dscale =
+                    Math.hypot(startX - altX, startY - altY) /
+                    Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY,
+                    );
+                const dx =
+                    (e.touches[0].clientX +
+                        e.touches[1].clientX -
+                        (startX + altX)) /
+                    2;
+                const dy =
+                    (e.touches[0].clientY +
+                        e.touches[1].clientY -
+                        (startY + altY)) /
+                    2;
+                let inv = invert4(viewMatrix);
+                // inv = translate4(inv,  0, 0, d);
+                inv = rotate4(inv, dtheta, 0, 0, 1);
+
+                inv = translate4(inv, -dx / innerWidth, -dy / innerHeight, 0);
+
+                // let preY = inv[13];
+                inv = translate4(inv, 0, 0, 3 * (1 - dscale));
+                // inv[13] = preY;
+
+                viewMatrix = invert4(inv);
+
+                startX = e.touches[0].clientX;
+                altX = e.touches[1].clientX;
+                startY = e.touches[0].clientY;
+                altY = e.touches[1].clientY;
+            }
         },
         { passive: false },
     );
@@ -1004,235 +1157,6 @@ async function main() {
         { passive: false },
     );
 
-    //joystickfunc();
-    //조이스틱 구현 부분
-    const joystickMovement = document.getElementById('joystick-movement');
-    const containerMovement = document.getElementById('joystick-container-movement');
-    
-    let touchIdMovement = null;
-    //지속적 움직임을 위한 변수
-    let moveX = 0, moveY = 0;
-    let isMoving = false;
-
-    containerMovement.addEventListener('touchstart', (event) => {
-        if (touchIdMovement === null) {
-            const touch = event.changedTouches[0];
-            touchIdMovement = touch.identifier;
-            isMoving = true;
-            moveJoystickMovement(touch.clientX, touch.clientY);
-            console.log("Touch down:", touch.clientX);
-        }
-    });
-
-    containerMovement.addEventListener('touchmove', (event) => {
-        if (touchIdMovement !== null) {
-            const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdMovement);
-            if (touch) {
-                moveJoystickMovement(touch.clientX, touch.clientY);
-            }
-        }
-    });
-
-    containerMovement.addEventListener('touchend', (event) => {
-        const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdMovement);
-        if (touch) {
-            touchIdMovement = null;
-            isMoving = false;
-            moveX = 0;
-            moveY = 0;
-            resetJoystickMovement();
-        }
-    });
-
-    containerMovement.addEventListener('touchcancel', (event) => {
-        const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdMovement);
-        if (touch) {
-            touchIdMovement = null;
-            isMoving = false;
-            moveX = 0;
-            moveY = 0;
-            resetJoystickMovement();
-        }
-    });
-
-    function moveJoystickMovement(clientX, clientY) {
-        const rect = containerMovement.getBoundingClientRect();
-        const x = clientX - rect.left - rect.width / 2;
-        const y = clientY - rect.top - rect.height / 2;
-        const angle = Math.atan2(y, x);
-        const distance = Math.min(Math.hypot(x, y), rect.width / 2 - joystickMovement.offsetWidth / 2);
-
-        moveX = distance * Math.cos(angle);
-        moveY = distance * Math.sin(angle);
-
-        joystickMovement.style.transform = `translate(${moveX - 50}%, ${moveY - 50}%)`;
-
-        // Update view matrix based on joystick movement
-        updateViewMatrix(moveX, moveY);
-    }
-
-    function resetJoystickMovement() {
-        joystickMovement.style.transform = 'translate(-50%, -50%)';
-        updateViewMatrix(0, 0); // Reset view matrix when joystick is released
-    }
-
-    function updateViewMatrix(joystickX, joystickY) {
-        // Normalize joystick inputs
-        const normalize = (value, max) => value / max;
-        const normalizedX = normalize(joystickX, containerMovement.clientWidth / 2);
-        const normalizedY = normalize(joystickY, containerMovement.clientHeight / 2);
-
-        const moveSpeed = 0.01;
-
-        // Calculate movement vectors
-        let rightVector = [rotationMatrix[0], rotationMatrix[1], rotationMatrix[2]];
-        let forwardVector = [rotationMatrix[8], rotationMatrix[9], rotationMatrix[10]];
-
-        // Normalize vectors
-        const normalizeVector = (v) => {
-            let length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-            return [v[0] / length, v[1] / length, v[2] / length];
-        };
-
-        rightVector = normalizeVector(rightVector);
-        forwardVector = normalizeVector(forwardVector);
-
-        let movement = [0, 0, 0];
-
-        // Apply joystick movement for forward/backward movement
-        movement[0] -= forwardVector[0] * normalizedY * moveSpeed;
-        //movement[1] -= forwardVector[1] * normalizedY * moveSpeed;
-        movement[2] += forwardVector[2] * normalizedY * moveSpeed;
-
-        // Apply joystick movement for right/left movement
-        movement[0] -= rightVector[0] * normalizedX * moveSpeed;
-        //movement[1] -= rightVector[1] * normalizedX * moveSpeed;
-        movement[2] += rightVector[2] * normalizedX * moveSpeed;
-
-        // 계산된 이동을 positionMatrix에 적용
-        positionMatrix = translate4(positionMatrix, movement[0], movement[1], movement[2]);
-
-        // 이동된 positionMatrix와 회전된 rotationMatrix를 결합하여 viewMatrix 갱신
-        viewMatrix = multiplyMatrices(positionMatrix, rotationMatrix);
-
-        console.log('View Matrix:', viewMatrix); // For debugging purposes
-    }
-    //지속적인 움직임을 위한 함수
-    function handleContinuousMovement() {
-        if (isMoving) {
-            // Update view matrix based on the last joystick movement
-            updateViewMatrix(moveX, moveY);
-        }
-        requestAnimationFrame(handleContinuousMovement);
-    }
-    
-    // 초기화 시 지속적인 이동 처리를 위한 함수 호출
-    handleContinuousMovement();
-
-    const joystickRotation = document.getElementById('joystick-rotation');
-    const containerRotation = document.getElementById('joystick-container-rotation');
-
-    let touchIdRotation = null;
-    let startXRotation = 0;
-    let startYRotation = 0;
-
-    containerRotation.addEventListener('touchstart', (event) => {
-        if (touchIdRotation === null) {
-            const touch = event.changedTouches[0];
-            touchIdRotation = touch.identifier;
-            startXRotation = touch.clientX;
-            startYRotation = touch.clientY;
-
-        }
-    });
-
-    const maxRotationX = 10 * (Math.PI / 180); // 30도 라디안 상하 회전 제한
-    const minRotationX = -10 * (Math.PI / 180); // -30도 라디안 상하 회전 제한
-
-    containerRotation.addEventListener('touchmove', (event) => {
-        if (touchIdRotation !== null) {
-            const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdRotation);
-            if (touch) {
-                const dx = (touch.clientX - startXRotation) / containerRotation.clientWidth;
-                const dy = (touch.clientY - startYRotation) / containerRotation.clientHeight;
-                
-                const rotateSpeed = 0.5;
-
-                accumulatedRotationY += dx * rotateSpeed; // Y축 회전 값 누적 (왼쪽으로 이동하면 증가)
-                accumulatedRotationX -= dy * rotateSpeed; // X축 회전 값 누적 (위로 이동하면 증가)
-
-                // X축 회전 값 제한
-                accumulatedRotationX = Math.max(minRotationX, Math.min(maxRotationX, accumulatedRotationX));
-
-                // 회전 행렬 생성
-                let rotationX = axisAngleRotationMatrix([1, 0, 0], accumulatedRotationX); // X축 회전
-                let rotationY = axisAngleRotationMatrix([0, 1, 0], accumulatedRotationY); // Y축 회전
-                rotationMatrix = multiplyMatrices(rotationY, rotationX);
-
-                //rotateViewMatrix(dx);
-                moveJoystickMovement2(touch.clientX, touch.clientY);
-                startXRotation = touch.clientX;
-                startYRotation = touch.clientY;
-            }
-        }
-    });
-
-    containerRotation.addEventListener('touchend', (event) => {
-        const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdRotation);
-        if (touch) {
-            touchIdRotation = null;
-            resetJoystick()
-        }
-    });
-
-    
-
-    function rotateY(matrix, angle) {
-        const cos = Math.cos(angle);
-        const sin = Math.sin(angle);
-
-        const rotationMatrix = [
-            cos, 0, sin, 0,
-            0, 1, 0, 0,
-            -sin, 0, cos, 0,
-            0, 0, 0, 1
-        ];
-
-        return multiplyMatrices(matrix, rotationMatrix);
-    }
-    function rotateX(matrix, angle) {
-        const cos = Math.cos(angle);
-        const sin = Math.sin(angle);
-    
-        const rotationMatrix = [
-            1, 0, 0, 0,
-            0, cos, -sin, 0,
-            0, sin, cos, 0,
-            0, 0, 0, 1
-        ];
-    
-        return multiplyMatrices(matrix, rotationMatrix);
-    }
-
-    
-    function resetJoystick() {
-        joystickRotation.style.transform = `translate(-50%, -50%)`;
-    }
-
-    function moveJoystickMovement2(clientX, clientY) {
-        const rect = containerRotation.getBoundingClientRect();
-        const x = clientX - rect.left - rect.width / 2;
-        const y = clientY - rect.top - rect.height / 2;
-        const angle = Math.atan2(y, x);
-        const distance = Math.min(Math.hypot(x, y), rect.width / 2 - joystickRotation.offsetWidth / 2);
-
-        const joystickX = distance * Math.cos(angle);
-        const joystickY = distance * Math.sin(angle);
-
-        joystickRotation.style.transform = `translate(${joystickX - 50}%, ${joystickY - 50}%)`;
-    }
-    //조이스틱 구현 끝
-    
     let jumpDelta = 0;
     let vertexCount = 0;
 
@@ -1240,64 +1164,142 @@ async function main() {
     let avgFps = 0;
     let start = 0;
 
+    window.addEventListener("gamepadconnected", (e) => {
+        const gp = navigator.getGamepads()[e.gamepad.index];
+        console.log(
+            `Gamepad connected at index ${gp.index}: ${gp.id}. It has ${gp.buttons.length} buttons and ${gp.axes.length} axes.`,
+        );
+    });
+    window.addEventListener("gamepaddisconnected", (e) => {
+        console.log("Gamepad disconnected");
+    });
+
+    let leftGamepadTrigger, rightGamepadTrigger;
+
     const frame = (now) => {
-        
-         // rotationMatrix에서 방향 벡터를 계산합니다.
-        let rightVector = [rotationMatrix[0], rotationMatrix[1], rotationMatrix[2]];
-        let upVector = [rotationMatrix[1], rotationMatrix[5], rotationMatrix[9]];
-        let forwardVector = [rotationMatrix[2], rotationMatrix[6], rotationMatrix[10]];
+        let inv = invert4(viewMatrix);
+        let shiftKey = activeKeys.includes("Shift") || activeKeys.includes("ShiftLeft") || activeKeys.includes("ShiftRight")
 
-        
-        // 벡터 정규화 함수
-        const normalize = (v) => {
-            let length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-            return [v[0] / length, v[1] / length, v[2] / length];
-        };
-
-        // 벡터들을 정규화합니다
-        rightVector = normalize(rightVector);
-        upVector = normalize(upVector);
-        forwardVector = normalize(forwardVector);
-        
-        const moveSpeed = 0.01;
-
-        let movement = [0, 0, 0];
-
-        if (activeKeys.includes("KeyW")) {
-            movement[0] -= forwardVector[0] * moveSpeed;
-            //movement[1] -= forwardVector[1] * moveSpeed;
-            movement[2] -= forwardVector[2] * moveSpeed;
-            
+        if (activeKeys.includes("ArrowUp")) {
+            if (shiftKey) {
+                inv = translate4(inv, 0, -0.03, 0);
+            } else {
+                inv = translate4(inv, 0, 0, 0.1);
+            }
         }
-        if (activeKeys.includes("KeyS")) {
-            movement[0] += forwardVector[0] * moveSpeed;
-            //movement[1] += forwardVector[1] * moveSpeed;
-            movement[2] += forwardVector[2] * moveSpeed;
+        if (activeKeys.includes("ArrowDown")) {
+            if (shiftKey) {
+                inv = translate4(inv, 0, 0.03, 0);
+            } else {
+                inv = translate4(inv, 0, 0, -0.1);
+            }
         }
-        if (activeKeys.includes("KeyD")) {
-            movement[0] -= rightVector[0] * moveSpeed;
-            //movement[1] -= rightVector[1] * moveSpeed;
-            movement[2] += rightVector[2] * moveSpeed;
-        }
-        if (activeKeys.includes("KeyA")) {
-            movement[0] += rightVector[0] * moveSpeed;
-            //movement[1] += rightVector[1] * moveSpeed;
-            movement[2] -= rightVector[2] * moveSpeed;
-        }
-
+        if (activeKeys.includes("ArrowLeft"))
+            inv = translate4(inv, -0.03, 0, 0);
+        //
+        if (activeKeys.includes("ArrowRight"))
+            inv = translate4(inv, 0.03, 0, 0);
+        // inv = rotate4(inv, 0.01, 0, 1, 0);
+        if (activeKeys.includes("KeyA")) inv = rotate4(inv, -0.01, 0, 1, 0);
+        if (activeKeys.includes("KeyD")) inv = rotate4(inv, 0.01, 0, 1, 0);
         if (activeKeys.includes("KeyQ")) inv = rotate4(inv, 0.01, 0, 0, 1);
         if (activeKeys.includes("KeyE")) inv = rotate4(inv, -0.01, 0, 0, 1);
-	    
-        // 계산된 이동을 positionMatrix에 적용
-        positionMatrix = translate4(positionMatrix, movement[0], movement[1], movement[2]);
+        if (activeKeys.includes("KeyW")) inv = rotate4(inv, 0.005, 1, 0, 0);
+        if (activeKeys.includes("KeyS")) inv = rotate4(inv, -0.005, 1, 0, 0);
 
-        // 이동된 positionMatrix와 회전된 rotationMatrix를 결합하여 viewMatrix 갱신
-        viewMatrix = multiplyMatrices(positionMatrix, rotationMatrix);
+        const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+        let isJumping = activeKeys.includes("Space");
+        for (let gamepad of gamepads) {
+            if (!gamepad) continue;
 
-        
+            const axisThreshold = 0.1; // Threshold to detect when the axis is intentionally moved
+            const moveSpeed = 0.06;
+            const rotateSpeed = 0.02;
 
-        let inv = invert4(viewMatrix);
+            // Assuming the left stick controls translation (axes 0 and 1)
+            if (Math.abs(gamepad.axes[0]) > axisThreshold) {
+                inv = translate4(inv, moveSpeed * gamepad.axes[0], 0, 0);
+                carousel = false;
+            }
+            if (Math.abs(gamepad.axes[1]) > axisThreshold) {
+                inv = translate4(inv, 0, 0, -moveSpeed * gamepad.axes[1]);
+                carousel = false;
+            }
+            if(gamepad.buttons[12].pressed || gamepad.buttons[13].pressed){
+                inv = translate4(inv, 0, -moveSpeed*(gamepad.buttons[12].pressed - gamepad.buttons[13].pressed), 0);
+                carousel = false;
+            }
 
+            if(gamepad.buttons[14].pressed || gamepad.buttons[15].pressed){
+                inv = translate4(inv, -moveSpeed*(gamepad.buttons[14].pressed - gamepad.buttons[15].pressed), 0, 0);
+                carousel = false;
+            }
+
+            // Assuming the right stick controls rotation (axes 2 and 3)
+            if (Math.abs(gamepad.axes[2]) > axisThreshold) {
+                inv = rotate4(inv, rotateSpeed * gamepad.axes[2], 0, 1, 0);
+                carousel = false;
+            }
+            if (Math.abs(gamepad.axes[3]) > axisThreshold) {
+                inv = rotate4(inv, -rotateSpeed * gamepad.axes[3], 1, 0, 0);
+                carousel = false;
+            }
+
+            let tiltAxis = gamepad.buttons[6].value - gamepad.buttons[7].value;
+            if (Math.abs(tiltAxis) > axisThreshold) {
+                inv = rotate4(inv, rotateSpeed * tiltAxis, 0, 0, 1);
+                carousel = false;
+            }
+            if (gamepad.buttons[4].pressed && !leftGamepadTrigger) {
+                camera = cameras[(cameras.indexOf(camera)+1)%cameras.length]
+                inv = invert4(getViewMatrix(camera));
+                carousel = false;
+            }
+            if (gamepad.buttons[5].pressed && !rightGamepadTrigger) {
+                camera = cameras[(cameras.indexOf(camera)+cameras.length-1)%cameras.length]
+                inv = invert4(getViewMatrix(camera));
+                carousel = false;
+            }
+            leftGamepadTrigger = gamepad.buttons[4].pressed;
+            rightGamepadTrigger = gamepad.buttons[5].pressed;
+            if (gamepad.buttons[0].pressed) {
+                isJumping = true;
+                carousel = false;
+            }
+            if(gamepad.buttons[3].pressed){
+                carousel = true;
+            }
+        }
+
+        if (
+            ["KeyJ", "KeyK", "KeyL", "KeyI"].some((k) => activeKeys.includes(k))
+        ) {
+            let d = 4;
+            inv = translate4(inv, 0, 0, d);
+            inv = rotate4(
+                inv,
+                activeKeys.includes("KeyJ")
+                    ? -0.05
+                    : activeKeys.includes("KeyL")
+                    ? 0.05
+                    : 0,
+                0,
+                1,
+                0,
+            );
+            inv = rotate4(
+                inv,
+                activeKeys.includes("KeyI")
+                    ? 0.05
+                    : activeKeys.includes("KeyK")
+                    ? -0.05
+                    : 0,
+                1,
+                0,
+                0,
+            );
+            inv = translate4(inv, 0, 0, -d);
+        }
 
         viewMatrix = invert4(inv);
 
@@ -1311,13 +1313,17 @@ async function main() {
             viewMatrix = invert4(inv);
         }
 
-       
+        if (isJumping) {
+            jumpDelta = Math.min(1, jumpDelta + 0.05);
+        } else {
+            jumpDelta = Math.max(0, jumpDelta - 0.05);
+        }
 
         let inv2 = invert4(viewMatrix);
         inv2 = translate4(inv2, 0, -jumpDelta, 0);
         inv2 = rotate4(inv2, -0.1 * jumpDelta, 1, 0, 0);
         let actualViewMatrix = invert4(inv2);
-            
+
         const viewProj = multiply4(projectionMatrix, actualViewMatrix);
         worker.postMessage({ view: viewProj });
 
@@ -1347,12 +1353,6 @@ async function main() {
         lastFrame = now;
         requestAnimationFrame(frame);
     };
-        // 예시로 키보드 이벤트 처리
-    
-    // 초기 상태 설정
-    let viewMatrix = multiplyMatrices(positionMatrix, rotationMatrix);
-    //requestAnimationFrame(frame);
-    //requestAnimationFrame(frame);
 
     frame();
 
@@ -1443,8 +1443,8 @@ async function main() {
             vertexCount: Math.floor(bytesRead / rowLength),
         });
 }
-// main 함수 호출 부분 수정
-loadSplat(currentUrl).catch((err) => {
+
+main().catch((err) => {
     document.getElementById("spinner").style.display = "none";
     document.getElementById("message").innerText = err.toString();
 });
