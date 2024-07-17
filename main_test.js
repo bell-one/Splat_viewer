@@ -1091,25 +1091,30 @@ async function main() {
     );
     canvas.addEventListener(
         "touchmove",
-        (e) => {
-            e.preventDefault();
-            if (e.touches.length === 1 && down) {
-                let inv = invert4(viewMatrix);
-                let dx = (4 * (e.touches[0].clientX - startX)) / innerWidth;
-                let dy = (4 * (e.touches[0].clientY - startY)) / innerHeight;
-
-                let d = 4;
-                inv = translate4(inv, 0, 0, d);
-                // inv = translate4(inv,  -x, -y, -z);
-                // inv = translate4(inv,  x, y, z);
-                inv = rotate4(inv, dx, 0, 1, 0);
-                inv = rotate4(inv, -dy, 1, 0, 0);
-                inv = translate4(inv, 0, 0, -d);
-
-                viewMatrix = invert4(inv);
-
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
+	    (e) => {
+	        e.preventDefault();
+	        if (e.touches.length === 1 && down) {
+	            let inv = invert4(viewMatrix);
+	            let dx = (4 * (e.touches[0].clientX - startX)) / innerWidth;
+	            let dy = (4 * (e.touches[0].clientY - startY)) / innerHeight;
+	
+	            // 현재 카메라 위치 저장
+	            let camPos = [inv[12], inv[13], inv[14]];
+	            
+	            // 원점으로 이동
+	            inv = translate4(inv, -camPos[0], -camPos[1], -camPos[2]);
+	            
+	            // 회전 적용
+	            inv = rotate4(inv, dx, 0, 1, 0);
+	            inv = rotate4(inv, -dy, 1, 0, 0);
+	            
+	            // 원래 위치로 되돌아가기
+	            inv = translate4(inv, camPos[0], camPos[1], camPos[2]);
+	
+	            viewMatrix = invert4(inv);
+	
+	            startX = e.touches[0].clientX;
+	            startY = e.touches[0].clientY;
             } else if (e.touches.length === 2) {
                 // alert('beep')
                 const dtheta =
