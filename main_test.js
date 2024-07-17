@@ -1094,22 +1094,31 @@ async function main() {
 	    (e) => {
 	        e.preventDefault();
 	        if (e.touches.length === 1 && down) {
-	            let inv = invert4(viewMatrix);
-	            let dx = (4 * (e.touches[0].clientX - startX)) / innerWidth;
-	            let dy = (4 * (e.touches[0].clientY - startY)) / innerHeight;
+	            let dx = (2 * Math.PI * (e.touches[0].clientX - startX)) / innerWidth;
+	            let dy = (Math.PI * (e.touches[0].clientY - startY)) / innerHeight;
 	
-	            // 현재 카메라 위치 저장
-	            let camPos = [inv[12], inv[13], inv[14]];
+	            let inv = invert4(viewMatrix);
 	            
+	            // 현재 카메라 위치 계산
+	            let camPos = [inv[12], inv[13], inv[14]];
+	            let camDist = Math.hypot(camPos[0], camPos[1], camPos[2]);
+	
 	            // 원점으로 이동
 	            inv = translate4(inv, -camPos[0], -camPos[1], -camPos[2]);
 	            
-	            // 회전 적용
+	            // Y축 중심 회전 (좌우 이동)
 	            inv = rotate4(inv, dx, 0, 1, 0);
-	            inv = rotate4(inv, -dy, 1, 0, 0);
 	            
-	            // 원래 위치로 되돌아가기
-	            inv = translate4(inv, camPos[0], camPos[1], camPos[2]);
+	            // 카메라의 오른쪽 벡터 계산
+	            let rightX = inv[0];
+	            let rightY = inv[4];
+	            let rightZ = inv[8];
+	            
+	            // 계산된 오른쪽 벡터를 중심으로 회전 (상하 이동)
+	            inv = rotate4(inv, dy, rightX, rightY, rightZ);
+	            
+	            // 원래 거리로 되돌아가기
+	            inv = translate4(inv, 0, 0, -camDist);
 	
 	            viewMatrix = invert4(inv);
 	
