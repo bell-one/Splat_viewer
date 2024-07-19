@@ -25,7 +25,7 @@ let cameras = [
 
 ];
 
-let currentUrl = "4th_floor.splat";
+let currentUrl = "0.5+1.0xVideo24.sh1.sc1.splat";
 
 // loadSplat 함수 추가
 async function loadSplat(url) {
