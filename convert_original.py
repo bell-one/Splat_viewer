@@ -1,14 +1,11 @@
+# You can use this to convert a .ply file to a .splat file programmatically in python
+# Alternatively you can drag and drop a .ply file into the viewer at https://antimatter15.com/splat
+
 from plyfile import PlyData
 import numpy as np
 import argparse
 from io import BytesIO
 
-# SH Constants
-SH_C0 = 0.28209479177387814
-SH_C1 = 0.4886025119029199
-SH_C2 = 1.0925484305920792
-SH_C3 = 0.31539156525252005
-SH_C4 = 0.5462742152960396
 
 def process_ply_to_splat(ply_file_path):
     plydata = PlyData.read(ply_file_path)
@@ -31,32 +28,15 @@ def process_ply_to_splat(ply_file_path):
             [v["rot_0"], v["rot_1"], v["rot_2"], v["rot_3"]],
             dtype=np.float32,
         )
-        
-        # Calculate color using SH0, SH1, SH2 coefficients
+        SH_C0 = 0.28209479177387814
         color = np.array(
             [
-                0.5 + SH_C0 * v["f_dc_0"] 
-                    + SH_C1 * v["f_dc_3"] * v["x"]
-                    + SH_C2 * v["f_dc_5"] * (2*v["z"]**2 - v["x"]**2 - v["y"]**2)
-                    + SH_C3 * v["f_dc_6"] * (v["x"]**2 - v["y"]**2)
-                    + SH_C4 * v["f_dc_8"] * (v["x"] * v["y"]),
-
-                0.5 + SH_C0 * v["f_dc_1"]
-                    + SH_C1 * v["f_dc_4"] * v["y"]
-                    + SH_C2 * v["f_dc_5"] * (2*v["z"]**2 - v["x"]**2 - v["y"]**2)
-                    + SH_C3 * v["f_dc_6"] * (v["x"]**2 - v["y"]**2)
-                    + SH_C4 * v["f_dc_8"] * (v["x"] * v["y"]),
-
-                0.5 + SH_C0 * v["f_dc_2"]
-                    + SH_C1 * v["f_dc_4"] * v["z"]
-                    + SH_C2 * v["f_dc_5"] * (2*v["z"]**2 - v["x"]**2 - v["y"]**2)
-                    + SH_C3 * v["f_dc_6"] * (v["x"]**2 - v["y"]**2)
-                    + SH_C4 * v["f_dc_8"] * (v["x"] * v["y"]),
-
+                0.5 + SH_C0 * v["f_dc_0"],
+                0.5 + SH_C0 * v["f_dc_1"],
+                0.5 + SH_C0 * v["f_dc_2"],
                 1 / (1 + np.exp(-v["opacity"])),
             ]
         )
-        
         buffer.write(position.tobytes())
         buffer.write(scales.tobytes())
         buffer.write((color * 255).clip(0, 255).astype(np.uint8).tobytes())

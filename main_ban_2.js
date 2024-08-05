@@ -20,7 +20,7 @@ let cameras = [ //focal용
 let camera = cameras[0];
 // 전역 변수로 캐시할 객체 선언
 let cachedData = null;
-let dataCheck = true; //clusterData 유무,
+let noDataCheck = false; //clusterData 없을 때,
 let moveRangeX = [];
 let moveRangeY = [];
 let moveRangeZ = [];
@@ -915,13 +915,16 @@ void main () {
 
 `.trim();
 
-let currentUrl = "splat_khtest.splat";
+let currentUrl = "ban_best.splat";
 // loadSplat 함수 추가
 async function loadSplat(url) {
     currentUrl = url;
     await main();
 }
 async function main() {
+    console.log(viewMatrix);
+
+    let carousel = false;
     const params = new URLSearchParams(location.search);
     try {
         viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
@@ -1297,7 +1300,7 @@ async function main() {
         // inv = rotate4(inv, dx, 0, -1, 0);
         // inv = rotate4(inv, -dy, -1, 0, 0);
         // viewMatrix = invert4(inv);
-        // //console.log(viewMatrix);
+        // //console.log(viewMatrix); 
 
         // startX = e.clientX;
         // startY = e.clientY;
@@ -1311,210 +1314,52 @@ async function main() {
     canvas.addEventListener("mouseout", (e) => {
         down = false;
     });
-
-    //touch orbit
+    let altX = 0,
+        altY = 0;
     canvas.addEventListener(
         "touchstart",
         (e) => {
             e.preventDefault();
             if (e.touches.length === 1) {
-                carousel = false;
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
                 down = 1;
-            } 
+            }else if (e.touches.length === 2) {
+                // console.log('beep')
+                startX = e.touches[0].clientX;
+                altX = e.touches[1].clientX;
+                startY = e.touches[0].clientY;
+                altY = e.touches[1].clientY;
+                down = 1;
+            }
         },
         { passive: false },
     );
     let orbitCheck = false;
     let orbitCheckinit = false;
-
     canvas.addEventListener(
         "touchmove",
         (e) => {
             e.preventDefault();
-            orbitCheck = true;
             if (e.touches.length === 1 && down) {
                 let inv = invert4(viewMatrix);
-                let dx = (8 * (e.touches[0].clientX - startX)) / innerWidth;
 
-                //x축 회전은 없앰.
-                //let dy = (4 * (e.touches[0].clientY - startY)) / innerHeight;
+                const dx = e.touches[0].clientX - startX
+                const dy = e.touches[0].clientY - startY
 
-                //orbit 반경 (0:fps)
-                let d = 0.3;
-                inv = translate4(inv, 0, 0, d);
-                inv = rotate4(inv, dx, 0, 1, 0);
-                inv = translate4(inv, 0, 0, -d);
-
-                orbit_rotationMatrix.value = extractRotationMatrix(inv);
-
-                viewMatrix = invert4(inv);
-
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-
-            } 
-        },
-        { passive: false },
-    );
-    canvas.addEventListener(
-        "touchend",
-        (e) => {
-            e.preventDefault();
-            down = false;
-            startX = 0;
-            startY = 0;
-        },
-        { passive: false },
-    );
-    //joystickfunc();
-    //조이스틱 구현 부분
-    const joystickMovement = document.getElementById('joystick-movement');
-    const containerMovement = document.getElementById('joystick-container-movement');
-    
-    let touchIdMovement = null;
-    //지속적 움직임을 위한 변수
-    let moveX = 0, moveY = 0;
-    let isMoving = false;
-
-    containerMovement.addEventListener('touchstart', (event) => {
-        if (touchIdMovement === null) {
-            const touch = event.changedTouches[0];
-            touchIdMovement = touch.identifier;
-            isMoving = true;
-            moveJoystickMovement(touch.clientX, touch.clientY);
-            console.log("Touch down:", touch.clientX);
-        }
-    });
-
-    containerMovement.addEventListener('touchmove', (event) => {
-        if (touchIdMovement !== null) {
-            const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdMovement);
-            if (touch) {
-                moveJoystickMovement(touch.clientX, touch.clientY);
-            }
-        }
-    });
-
-    containerMovement.addEventListener('touchend', (event) => {
-        const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdMovement);
-        if (touch) {
-            touchIdMovement = null;
-            isMoving = false;
-            moveX = 0;
-            moveY = 0;
-            resetJoystickMovement();
-        }
-    });
-
-    containerMovement.addEventListener('touchcancel', (event) => {
-        const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdMovement);
-        if (touch) {
-            touchIdMovement = null;
-            isMoving = false;
-            moveX = 0;
-            moveY = 0;
-            resetJoystickMovement();
-        }
-    });
-    function moveJoystickMovement(clientX, clientY) {
-        const rect = containerMovement.getBoundingClientRect();
-        const x = clientX - rect.left - rect.width / 2;
-        const y = clientY - rect.top - rect.height / 2;
-        const angle = Math.atan2(y, x);
-        const distance = Math.min(Math.hypot(x, y), rect.width / 2 - joystickMovement.offsetWidth / 2);
-
-        moveX = distance * Math.cos(angle);
-        moveY = distance * Math.sin(angle);
-
-        joystickMovement.style.transform = `translate(${moveX - 50}%, ${moveY - 50}%)`;
-
-        // Update view matrix based on joystick movement
-        updateViewMatrixJoy(moveX, moveY);
-    }
-
-    function resetJoystickMovement() {
-        joystickMovement.style.transform = 'translate(-50%, -50%)';
-        updateViewMatrixJoy(0, 0); // Reset view matrix when joystick is released
-    }
-
-    function updateViewMatrixJoy(joystickX, joystickY) {
-        let inv = invert4(viewMatrix);
-        let tempInv = inv;
-        const normalize = (value, max) => value / max;
-        const normalizedX = normalize(joystickX, containerMovement.clientWidth / 2);
-        const normalizedY = normalize(joystickY, containerMovement.clientHeight / 2);
-        console.log(normalizedY);
-        tempInv = translate4(tempInv, 0.01 * normalizedX, 0, 0); 
-        tempInv = translate4(tempInv, 0, 0, -0.01 * normalizedY); 
-
-        const tx = tempInv[12];
-        const ty = tempInv[14];
-        const tz = tempInv[13];
-        const tempPositionVector = new Vector3(tx, ty, tz);
-        
-        // Check for collision
-        if (IsPointInsidePolygon(tempPositionVector)) {
-            // If no collision, update the inverse matrix
-            inv = tempInv;          
-            viewMatrix = invert4(inv);
-            console.log();
-        } else {
-            console.log('Collision detected, movement blocked.');
-        }
-    }
-    //지속적인 움직임을 위한 함수
-    function handleContinuousMovement() {
-        if (isMoving) {
-            // Update view matrix based on the last joystick movement
-            updateViewMatrixJoy(moveX, moveY);
-        }
-        requestAnimationFrame(handleContinuousMovement);
-    }
-    
-    // 초기화 시 지속적인 이동 처리를 위한 함수 호출
-    handleContinuousMovement();
-
-    const joystickRotation = document.getElementById('joystick-rotation');
-    const containerRotation = document.getElementById('joystick-container-rotation');
-
-    let touchIdRotation = null;
-    let startXRotation = 0;
-    let startYRotation = 0;
-
-    containerRotation.addEventListener('touchstart', (event) => {
-        if (touchIdRotation === null) {
-            const touch = event.changedTouches[0];
-            touchIdRotation = touch.identifier;
-            startXRotation = touch.clientX;
-            startYRotation = touch.clientY;
-
-        }
-    });
-
-    let touchRotSensitivity = 10;
-    containerRotation.addEventListener('touchmove', (event) => {
-        if (touchIdRotation !== null) {
-            const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdRotation);
-            if (touch) {
-                let inv = invert4(viewMatrix);
-
-                const dx = (touch.clientX - startXRotation) / containerRotation.clientWidth;
-                const dy = (touch.clientY - startYRotation) / containerRotation.clientHeight;
-
-                accumulatedRotationY += dx * touchRotSensitivity; 
-                accumulatedRotationX += dy * touchRotSensitivity; 
+                accumulatedRotationY += dx * 0.1; 
+                accumulatedRotationX += dy * 0.1; 
                 
                 accumulatedRotationX = Math.max(minRotationX, Math.min(accumulatedRotationX, maxRotationX));
 
                 // 회전 행렬 생성
-                let rotationX = axisAngleRotationMatrix([1, 0, 0], accumulatedRotationX); // X축 회전
-                let rotationY = axisAngleRotationMatrix([0, 1, 0], -accumulatedRotationY); // Y축 회전
+                let rotationX = axisAngleRotationMatrix([1, 0, 0], -accumulatedRotationX); // X축 회전
+                let rotationY = axisAngleRotationMatrix([0, 1, 0], accumulatedRotationY); // Y축 회전
         
                 rotationMatrix.value = multiply3x3Matrices(rotationX, rotationY);  
         
                 if(orbitCheck){
+                    console.log("in");
                     if(!orbitCheckinit){
                         orbitCheckinit = true;
                         accumulatedRotationY = 0; // Y축 회전 값 초기화
@@ -1534,38 +1379,184 @@ async function main() {
                 inv = updateViewMatrixWithRotation(inv, rotationMatrix.value);
         
                 viewMatrix = invert4(inv);
-                moveJoystickMovement2(touch.clientX, touch.clientY);
-                startXRotation = touch.clientX;
-                startYRotation = touch.clientY;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                
+            } else if (e.touches.length === 2) {
+
+                const dscale =
+                    Math.hypot(startX - altX, startY - altY) /
+                    Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY,
+                     );
+                const dx =
+                    (e.touches[0].clientX +
+                        e.touches[1].clientX -
+                        (startX + altX)) /
+                    2;
+                const dy =
+                    (e.touches[0].clientY +
+                        e.touches[1].clientY -
+                        (startY + altY)) /
+                    2;
+                let inv = invert4(viewMatrix);
+                let tempInv = inv;
+
+                // inv = translate4(inv,  0, 0, d);
+                //inv = rotate4(inv, dtheta, 0, 0, 1);
+
+                tempInv = translate4(tempInv, -dx / innerWidth, -dy / innerHeight, 0);
+
+                // let preY = inv[13];
+                tempInv = translate4(tempInv, 0, 0, 0.4 * (1 - dscale));
+                // inv[13] = preY;
+
+                const tx = tempInv[12];
+                const ty = tempInv[14];
+                const tz = tempInv[13];
+                const tempPositionVector = new Vector3(tx, ty, tz);
+
+                // Check for collision
+                if (IsPointInsidePolygon(tempPositionVector)) {
+                    // If no collision, update the inverse matrix
+                    inv = tempInv;          
+                    viewMatrix = invert4(inv);
+                } else {
+                    console.log('Collision detected, movement blocked.');
+                }
+
+                startX = e.touches[0].clientX;
+                altX = e.touches[1].clientX;
+                startY = e.touches[0].clientY;
+                altY = e.touches[1].clientY;
             }
-        }
-    });
+        },
+        { passive: false },
+    );
+    canvas.addEventListener(
+        "touchend",
+        (e) => {
+            e.preventDefault();
+            down = false;
+            startX = 0;
+            startY = 0;
+        },
+        { passive: false },
+    );
+    //joystickfunc();
+    //조이스틱 구현 부분
+    //없애달라 - 사업부서 의견
+    // const joystickRotation = document.getElementById('joystick-rotation');
+    // const containerRotation = document.getElementById('joystick-container-rotation');
 
-    containerRotation.addEventListener('touchend', (event) => {
-        const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdRotation);
-        if (touch) {
-            touchIdRotation = null;
-            resetJoystick()
-        }
-    });
-    function resetJoystick() {
-        joystickRotation.style.transform = `translate(-50%, -50%)`;
-    }
+    // let touchIdRotation = null;
+    // let startXRotation = 0;
+    // let startYRotation = 0;
 
-    function moveJoystickMovement2(clientX, clientY) {
-        const rect = containerRotation.getBoundingClientRect();
-        const x = clientX - rect.left - rect.width / 2;
-        const y = clientY - rect.top - rect.height / 2;
-        const angle = Math.atan2(y, x);
-        const distance = Math.min(Math.hypot(x, y), rect.width / 2 - joystickRotation.offsetWidth / 2);
+    // containerRotation.addEventListener('touchstart', (event) => {
+    //     if (touchIdRotation === null) {
+    //         const touch = event.changedTouches[0];
+    //         touchIdRotation = touch.identifier;
+    //         startXRotation = touch.clientX;
+    //         startYRotation = touch.clientY;
 
-        const joystickX = distance * Math.cos(angle);
-        const joystickY = distance * Math.sin(angle);
+    //     }
+    // });
 
-        joystickRotation.style.transform = `translate(${joystickX - 50}%, ${joystickY - 50}%)`;
-    }
-    //조이스틱 구현 끝
+    // let touchRotSensitivity = 10;
+    // containerRotation.addEventListener('touchmove', (event) => {
+    //     if (touchIdRotation !== null) {
+    //         const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdRotation);
+    //         if (touch) {
+    //             orbitCheck = true;
+    //             let inv = invert4(viewMatrix);
+    //             const dx = (touch.clientX - startXRotation) / containerRotation.clientWidth;
+
+    //             //x축 회전은 없앰.
+    //             //let dy = (4 * (e.touches[0].clientY - startY)) / innerHeight;
+
+    //             //orbit 반경 (0:fps)
+    //             let d = 0.3;
+    //             inv = translate4(inv, 0, 0, d);
+    //             inv = rotate4(inv, dx, 0, 1, 0);
+    //             inv = translate4(inv, 0, 0, -d);
+
+    //             orbit_rotationMatrix.value = extractRotationMatrix(inv);
+
+    //             viewMatrix = invert4(inv);
+    //             moveJoystickMovement2(touch.clientX, touch.clientY);
+    //             startXRotation = touch.clientX;
+    //             startYRotation = touch.clientY;
+
+    //             // let inv = invert4(viewMatrix);
+
+    //             // const dx = (touch.clientX - startXRotation) / containerRotation.clientWidth;
+    //             // const dy = (touch.clientY - startYRotation) / containerRotation.clientHeight;
+
+    //             // accumulatedRotationY += dx * touchRotSensitivity; 
+    //             // accumulatedRotationX += dy * touchRotSensitivity; 
+                
+    //             // accumulatedRotationX = Math.max(minRotationX, Math.min(accumulatedRotationX, maxRotationX));
+
+    //             // // 회전 행렬 생성
+    //             // let rotationX = axisAngleRotationMatrix([1, 0, 0], accumulatedRotationX); // X축 회전
+    //             // let rotationY = axisAngleRotationMatrix([0, 1, 0], -accumulatedRotationY); // Y축 회전
         
+    //             // rotationMatrix.value = multiply3x3Matrices(rotationX, rotationY);  
+        
+    //             // if(orbitCheck){
+    //             //     if(!orbitCheckinit){
+    //             //         orbitCheckinit = true;
+    //             //         accumulatedRotationY = 0; // Y축 회전 값 초기화
+    //             //         accumulatedRotationX = 0; // X축 회전 값 초기화
+    //             //         rotationMatrix = createIdentityMatrix3x3(); //기존 rotationMatrix 초기화
+    //             //     }
+    //             //     //초기 틀어짐 방지
+    //             //     rotationMatrix.value = multiply3x3Matrices(rotationMatrix.value, orbit_rotationMatrix.value);  
+    //             //     console.log(rotationMatrix.value);
+
+
+    //             // }else{ //spacebar눌러서 viewpoint 받기 전
+    //             //     rotationMatrix.value = multiply3x3Matrices(rotationMatrix.value, init_rotationMatrix.value);
+    //             // }
+
+    //             // //Update
+    //             // inv = updateViewMatrixWithRotation(inv, rotationMatrix.value);
+        
+    //             // viewMatrix = invert4(inv);
+    //             // moveJoystickMovement2(touch.clientX, touch.clientY);
+    //             // startXRotation = touch.clientX;
+    //             // startYRotation = touch.clientY;
+    //         }
+    //     }
+    // });
+
+    // containerRotation.addEventListener('touchend', (event) => {
+    //     const touch = Array.from(event.changedTouches).find(t => t.identifier === touchIdRotation);
+    //     if (touch) {
+    //         touchIdRotation = null;
+    //         resetJoystick()
+    //     }
+    // });
+    // function resetJoystick() {
+    //     joystickRotation.style.transform = `translate(-50%, -50%)`;
+    // }
+
+    // function moveJoystickMovement2(clientX, clientY) {
+    //     const rect = containerRotation.getBoundingClientRect();
+    //     const x = clientX - rect.left - rect.width / 2;
+    //     const y = clientY - rect.top - rect.height / 2;
+    //     const angle = Math.atan2(y, x);
+    //     const distance = Math.min(Math.hypot(x, y), rect.width / 2 - joystickRotation.offsetWidth / 2);
+
+    //     const joystickX = distance * Math.cos(angle);
+    //     const joystickY = distance * Math.sin(angle);
+
+    //     joystickRotation.style.transform = `translate(${joystickX - 50}%, ${joystickY - 50}%)`;
+    // }
+    // //조이스틱 구현 끝
+
     let vertexCount = 0;
 
     let lastFrame = 0;
@@ -1624,7 +1615,7 @@ async function main() {
 
 
 
-        if (spacePressed && dataCheck) {
+        if (spacePressed && !noDataCheck) {
 
             spaceStart = true;
             spaceStartinit = false;
